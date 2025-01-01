@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_contract_view_form_inherit_sd_hr_contracts" model="ir.ui.view">
+        <field name="name">hr_contract.hr_contract_view_form.view.form.inherit.sd_hr_contracts</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <header>
+
+                <button class="btn btn-primary" name="regenerate_template"
+                        type="object" icon="fa-print">
+                    print
+                    <!--                    <field string="documents" name="document_count" widget="statinfo"/>-->
+                </button>
+            </header>
+
+            <xpath expr="//field[@name='hr_responsible_id']" position="after">
+
+                <field name="doc_template" options="{'no_create': True, 'no_edit': True, 'no_open': True}"
+                       domain="[('contract_type', '=', contract_type_id)]"/>
+                <field name="output_file" widget="binary" readonly="1"/>
+                <field name="output_pdf" widget="binary" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="subject"/>
+            </xpath>
+            <xpath expr="//field[@name='employee_id']" position="after">
+                <field name="identification_id"/>
+                <field name="father_name"/>
+            </xpath>
+            <xpath expr="//field[@name='date_start']" position="before">
+                <field name="representative"/>
+                <field name="issue_date"/>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="after">
+                <field name="project_name"/>
+            </xpath>
+            <xpath expr="//field[@name='resource_calendar_id']" position="after">
+            </xpath>
+            <xpath expr="//page[@name='information']" position="inside">
+                <group name="hourly_rate_info" string="Hourly Rate">
+                    <group name="Hourly Rate">
+                        <label for="hourly_rate"/>
+                        <div class="o_row mw-50" name="hourly_rate">
+                            <field name="hourly_rate" class="oe_inline o_hr_narrow_field" nolabel="1"/>
+                            <div class="mb-3" name="_period_label">/ Hour</div>
+                        </div>
+                        <field name="hourly_rate_text"/>
+                        <label for="bond"/>
+                        <div class="o_row mw-50" name="bond">
+                            <field name="bond" class="oe_inline o_hr_narrow_field" nolabel="1"/>
+                            <div class="mb-3" name="bond_period_label"> % </div>
+                        </div>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

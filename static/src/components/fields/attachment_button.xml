@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="sd_hr.AddAttachmentButton">
+        <div>
+            <div class="btn btn-outline-dark" t-on-click="onClick">
+                <i class="fa fa-plus-square"/>
+                    Attach files
+            </div>
+        </div>
+    </t>
+
+</templates>

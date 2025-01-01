@@ -1,0 +1,518 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sd_hr_contracts
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-29 06:22+0000\n"
+"PO-Revision-Date: 2024-12-29 09:54+0330\n"
+"Last-Translator: Arash Homayounfar <homayounfar@msn.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: fa\n"
+"X-Generator: Poedit 2.2\n"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__sd_hr_contracts_attachments__notify_days__10
+msgid "10"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__sd_hr_contracts_attachments__notify_days__30
+msgid "30"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__sd_hr_contracts_attachments__notify_days__60
+msgid "60"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__sd_hr_contracts_attachments__notify_days__90
+msgid "90"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: sd_hr_contracts
+#. odoo-javascript
+#: code:addons/custom/addons/sd_hr_contracts/static/src/components/fields/attachment_button.js:0
+#: code:addons/sd_hr_contracts/static/src/components/fields/attachment_button.js:0
+#, python-format
+msgid "Add Attachment"
+msgstr "افزودن پیوست"
+
+#. module: sd_hr_contracts
+#. odoo-javascript
+#: code:addons/custom/addons/sd_hr_contracts/static/src/components/fields/attachment_button.xml:0
+#: code:addons/sd_hr_contracts/static/src/components/fields/attachment_button.xml:0
+#, python-format
+msgid "Attach files"
+msgstr "افزودن فایل"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:sd_hr_contracts.document_type,name:sd_hr_contracts.document_type_07
+msgid "Awards"
+msgstr "دست آوردها"
+
+#. module: sd_hr_contracts
+#: model:sd_hr_contracts.document_type,name:sd_hr_contracts.document_type_02
+msgid "Birth Certificate"
+msgstr "شناسنامه"
+
+#. module: sd_hr_contracts
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.document_attachments_view_form
+msgid "Chatter Attachments"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,help:sd_hr_contracts.field_hr_employee__document_count
+msgid "Count of documents."
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__create_uid
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_document_type__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__create_date
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_document_type__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__sd_hr_contracts_attachments__notify_duration__daily
+msgid "Daily"
+msgstr "روزانه"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__display_name
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_document_type__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__document_type
+msgid "Document Type"
+msgstr "نوع سند"
+
+#. module: sd_hr_contracts
+#: model:sd_hr_contracts.document_type,name:sd_hr_contracts.document_type_03
+msgid "Driving License"
+msgstr "گواهی نامه رانندگی"
+
+#. module: sd_hr_contracts
+#: model:sd_hr_contracts.document_type,name:sd_hr_contracts.document_type_05
+msgid "Educations"
+msgstr "تحصیلات"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__sd_hr_contracts_attachments__notify_type__email
+msgid "Email"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model,name:sd_hr_contracts.model_hr_employee
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__employee_id
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.document_attachments_view_search
+msgid "Employee"
+msgstr "کارمند"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__employee_document_count
+msgid "Employee Document Count"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.document_attachments_view_form
+msgid "Employee docs"
+msgstr "مستندات کارمند"
+
+#. module: sd_hr_contracts
+#: model:ir.actions.act_window,name:sd_hr_contracts.document_type_action
+msgid "Employee document Types"
+msgstr "انواع مستندات کارمند"
+
+#. module: sd_hr_contracts
+#: model:ir.actions.act_window,name:sd_hr_contracts.document_all_attachments_action
+#: model:ir.actions.act_window,name:sd_hr_contracts.document_attachments_action
+msgid "Employee document attachments"
+msgstr "پیوست مستندات کارمند"
+
+#. module: sd_hr_contracts
+#: model:sd_hr_contracts.document_type,name:sd_hr_contracts.document_type_06
+msgid "Experience"
+msgstr "تجربه کاری"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__expiration
+msgid "Expiration"
+msgstr "انقضا"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__expire_date
+msgid "Expire Date"
+msgstr "تاریخ انقضا"
+
+#. module: sd_hr_contracts
+#. odoo-python
+#: code:addons/custom/addons/sd_hr_contracts/models/models.py:0
+#: code:addons/sd_hr_contracts/models/models.py:0
+#, python-format
+msgid "Expire date is not correct."
+msgstr "تاریخ انقضا درست نیست"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__sd_hr_contracts_attachments__state__expired
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.document_attachments_view_form
+msgid "Expired"
+msgstr "منقضی شده"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__sd_hr_contracts_attachments__state__expiring
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.document_attachments_view_form
+msgid "Expiring"
+msgstr "نزدیک انقضا"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,help:sd_hr_contracts.field_sd_hr_contracts_attachments__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.document_attachments_view_search
+msgid "Group By"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.document_attachments_view_form
+msgid "HR Document Attachment Form"
+msgstr "فرم پیوست های مستندات منابع انسانی"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__id
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_document_type__id
+msgid "ID"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:sd_hr_contracts.document_type,name:sd_hr_contracts.document_type_01
+msgid "ID Card"
+msgstr "کارت ملی"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,help:sd_hr_contracts.field_sd_hr_contracts_attachments__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,help:sd_hr_contracts.field_sd_hr_contracts_attachments__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,help:sd_hr_contracts.field_sd_hr_contracts_attachments__message_has_error
+#: model:ir.model.fields,help:sd_hr_contracts.field_sd_hr_contracts_attachments__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__issue_date
+msgid "Issue Date"
+msgstr "تاریخ صدور"
+
+#. module: sd_hr_contracts
+#. odoo-python
+#: code:addons/custom/addons/sd_hr_contracts/models/models.py:0
+#: code:addons/sd_hr_contracts/models/models.py:0
+#, python-format
+msgid "Issue date cannot be after today's date."
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__write_uid
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_document_type__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__write_date
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_document_type__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:sd_hr_contracts.document_type,name:sd_hr_contracts.document_type_04
+msgid "Military Card"
+msgstr "کارت پایان خدمت"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__name
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_document_type__name
+msgid "Name"
+msgstr "نام"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__activity_calendar_event_id
+msgid "Next Activity Calendar Event"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__notify_days
+msgid "Notify Days"
+msgstr "روز اعلام"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__notify_duration
+msgid "Notify Duration"
+msgstr "دوره اعلام"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__notify_type
+msgid "Notify Type"
+msgstr "نوع اعلام"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,help:sd_hr_contracts.field_sd_hr_contracts_attachments__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,help:sd_hr_contracts.field_sd_hr_contracts_attachments__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__sd_hr_contracts_attachments__notify_type__odoo
+msgid "Odoo"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__sd_hr_contracts_attachments__notify_type__odoo_email
+msgid "Odoo & Email"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:sd_hr_contracts.document_type,name:sd_hr_contracts.document_type_10
+msgid "Others"
+msgstr "غیره"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__rating_ids
+msgid "Ratings"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:sd_hr_contracts.document_type,name:sd_hr_contracts.document_type_08
+msgid "References"
+msgstr "معرفی نامه ها"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__related_res_id
+msgid "Related ID"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__related_model
+msgid "Related Model"
+msgstr "مدل زیر مجموعه"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__related_model_records1
+msgid "Related Model Records1"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__related_res_name
+msgid "Related Name"
+msgstr "نام زیر مجموعه"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__state
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.document_attachments_view_search
+msgid "State"
+msgstr "وضعیت"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,help:sd_hr_contracts.field_sd_hr_contracts_attachments__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:sd_hr_contracts.document_type,name:sd_hr_contracts.document_type_09
+msgid "Training"
+msgstr "آموزش"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,help:sd_hr_contracts.field_sd_hr_contracts_attachments__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__sd_hr_contracts_attachments__state__valid
+msgid "Valid"
+msgstr "معتبر"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_attachments__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,help:sd_hr_contracts.field_sd_hr_contracts_attachments__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__sd_hr_contracts_attachments__notify_duration__weekly
+msgid "Weekly"
+msgstr "هفتگی"
+
+#. module: sd_hr_contracts
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.document_attachments_view_form
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.document_type_view_form
+msgid "document Name"
+msgstr "نام مستند"
+
+#. module: sd_hr_contracts
+#: model:ir.model,name:sd_hr_contracts.model_sd_hr_contracts_document_type
+msgid "document Type"
+msgstr "نوع مستند"
+
+#. module: sd_hr_contracts
+#: model:ir.ui.menu,name:sd_hr_contracts.document_type_menu
+msgid "document Types"
+msgstr "انواع مستندات"
+
+#. module: sd_hr_contracts
+#: model:ir.model,name:sd_hr_contracts.model_sd_hr_contracts_attachments
+#: model:ir.ui.menu,name:sd_hr_contracts.document_attachments_menu
+msgid "document attachments"
+msgstr "پیوست های مستند"
+
+#. module: sd_hr_contracts
+#. odoo-python
+#: code:addons/custom/addons/sd_hr_contracts/models/hr_employee.py:0
+#: code:addons/custom/addons/sd_hr_contracts/models/models.py:0
+#: code:addons/sd_hr_contracts/models/hr_employee.py:0
+#: code:addons/sd_hr_contracts/models/models.py:0
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_employee__document_count
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_employee__document_ids
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.view_employee_form
+#, python-format
+msgid "documents"
+msgstr "مستندات"

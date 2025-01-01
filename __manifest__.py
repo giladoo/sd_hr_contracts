@@ -1,0 +1,32 @@
+# -*- coding: utf-8 -*-
+{
+    'name': 'SD HR Contracts',
+    'version': '17.0.1.0.0',
+    'category': 'Human Resources',
+    'summary': """ """,
+    'author': 'Arash Homayounfar',
+    'company': 'Giladoo',
+    'maintainer': 'Giladoo',
+    'website': "https://www.giladoo.com",
+    'installable': True,
+    'auto_install': False,
+    'application': False,
+    'depends': ['base', 'hr', 'hr_contract', 'sd_hr'],
+    'data': [
+        'security/ir.model.access.csv',
+        # 'views/views.xml',
+        # 'views/hr_employee_views.xml',
+        'views/hr_contract_doc_template_views.xml',
+        'views/hr_contract_views.xml',
+    ],
+'assets': {
+        'web.assets_backend':[
+            # 'sd_hr_contracts/static/src/components/**/*'
+        ],
+
+    },
+    'demo': [
+
+    ],
+    'license': 'LGPL-3',
+}
