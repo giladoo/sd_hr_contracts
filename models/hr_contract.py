@@ -12,6 +12,8 @@ import base64
 import os
 from tempfile import NamedTemporaryFile
 from odoo.tools import html_escape
+from bs4 import BeautifulSoup
+
 
 J_DATE_FORMAT = "%Y/%m/%d"
 B_NAZANIN = 'B Nazanin'
@@ -31,99 +33,144 @@ class SdHrContractContract(models.Model):
     father_name = fields.Char(related='employee_id.father_name')
     representative = fields.Many2one('hr.employee')
 
+    # PartTime Contract
     hourly_rate = fields.Integer()
     hourly_rate_text = fields.Char()
     bond = fields.Integer()
 
+    # FullTime Contract
+    pr_base = fields.Integer()
+    pr_absorbent = fields.Integer()
+    pr_job = fields.Integer()
+    pr_marriage = fields.Integer()
+    pr_commute = fields.Integer()
+    pr_other = fields.Integer()
+    pr_children = fields.Integer()
+    pr_housing = fields.Integer()
+    pr_groceries = fields.Integer()
+    pr_rotation = fields.Integer()
+    pr_sum = fields.Integer(compute='_pr_sum', store=True)
+
+    '''
+        pr_base         حقوق پایه 
+        فوق العاده جذب    pr_absorbent
+        فوق العاده      شغل pr_job
+        حق تاهل     pr_marriage
+        ایاب و ذهاب      pr_commute
+        سایر مزایا        pr_other
+        حق اولاد     pr_children
+        حق مسکن      pr_housing
+        بن و خواروبار    pr_groceries
+        فوق العاده اقماری     pr_rotation
+        جمع قرارداد          pr_sum
+    '''
 
 
+    additional_note = fields.Text()
 
+    @api.depends('pr_base', 'pr_absorbent', 'pr_job', 'pr_marriage', 'pr_commute', 'pr_other', 'pr_children', 'pr_housing', 'pr_groceries', 'pr_rotation')
+    def _pr_sum(self):
+        for rec in self:
+            rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries  + rec.pr_rotation
 
     def regenerate_template(self):
-        def set_english_font(run):
-            text_font = B_YEKAN
-            run.font.name =  text_font # Set an appropriate English
-            run._element.rPr.rFonts.set(qn('w:eastAsia'), text_font)
-            run.font.size = Pt(12) # Set font size as needed
-
         for record in self:
+            variables = []
+            value_function_list = []
+            numeral_variables = []
+            html_variables = []
+            variables_dict = {}
+            # TODO: to make it general we need to make document template module as a general module.
+
+            hr_contract_model = self.env['ir.model'].sudo().search([('model', '=', 'hr.contract')])
+            # print(f">>>>\n  > hr_contract_model:{hr_contract_model}")
+            if hr_contract_model:
+
+                variables = self.env['sd_hr.variables'].sudo().search([('model_id', '=', hr_contract_model.id),
+                                                                       ('model_res_id', '=', record.doc_template.id)])
+                print(f"  > variables: {variables}")
+                if variables:
+                    variables_dict = dict({rec.variable: rec.value_text if rec.value_source == 'text' else rec.value_function for rec in variables})
+                    value_function_list = list([rec.variable for rec in variables if rec.value_source == 'function'])
+                    print(f"  > variables_dict: {variables_dict}\n  > value_function_list: {value_function_list}")
+
             # Load the .docx file from the binary field
             template_data = base64.b64decode(record.doc_template.template_file)
             template = Document(BytesIO(template_data))
             html_content = ''
 
             # Replace placeholders with actual values
-            variable_list = [('v_employee_name', 'record.employee_id.name'),
-                             ('v_employee_father', 'record.employee_id.father_name'),
-                             ('v_employee_id_no', 'record.employee_id.identification_id'),
-                             ('v_contract_no', 'record.name'),
-                             ('v_contract_type', 'record.contract_type_id.name'),
-                             ('v_contract_project', 'record.project_name.name'),
-                             ('v_contract_subject', 'record.subject'),
-                             ('v_contract_job', 'record.job_id.name'),
-                             ('v_contract_hourly_rate', 'f"{record.hourly_rate:,}"'),
-                             ('v_contract_hourly_text', 'record.hourly_rate_text'),
-                             ('v_contract_bond', 'str(record.bond)'),
-                             ('v_contract_issue_date', 'jdatejs(record.issue_date, J_DATE_FORMAT)'),
-                             ('v_contract_start_date', ' jdatejs(record.date_start, J_DATE_FORMAT)'),
-                             ('v_contract_end_date', ' jdatejs(record.date_end, J_DATE_FORMAT)'),
-                             ]
+            variables_dict1 = {'v_employee_name': 'record.employee_id.name',
+                             'v_employee_father': 'record.employee_id.father_name',
+                             'v_employee_title': 'record.employee_id.personal_title.shortcut',
+                             'v_employee_id_no': 'record.employee_id.identification_id',
+                             'v_contract_no': 'record.name',
+                             'v_contract_type': 'record.contract_type_id.name',
+                             'v_contract_project': 'record.project_name.name',
+                             'v_contract_subject': 'record.subject',
+                             'v_contract_job': 'record.job_id.name',
+                             'v_contract_hourly_rate': 'f"{record.hourly_rate:,}"',
+                             'v_contract_hourly_text': 'record.hourly_rate_text',
+                             'v_contract_additional_note': 'record.additional_note',
+                             'v_contract_bond': 'str(record.bond)',
+                             'v_company_representative': 'record.representative.name',
+                             'v_contract_issue_date': 'jdatejs(record.issue_date, J_DATE_FORMAT)',
+                             'v_contract_start_date': ' jdatejs(record.date_start, J_DATE_FORMAT)',
+                             'v_contract_end_date': ' jdatejs(record.date_end, J_DATE_FORMAT)',
+                             }
+            # numeral_variables = list([rec.variable for rec in variables])
+            numeral_variables1 = ['v_contract_no', 'v_contract_issue_date',
+                                 'v_contract_start_date',  'v_contract_end_date',  ]
+            html_variables1 = []
+
             for paragraph in template.paragraphs:
                 for run in paragraph.runs:
-                    for variable in variable_list:
-                        if variable[0] in run.text:
-                            run.text = run.text.replace(variable[0], eval(variable[1]) or '')
-                            if variable[0] in ['v_contract_issue_date', 'v_contract_no',
-                                               'v_contract_issue_date', 'v_contract_start_date',  'v_contract_end_date',  ]:
-                                set_english_font(run)
-                            else:
-                                run.font.name = B_NAZANIN
-                            # print(run.text)
+                    for variable, new_value in variables_dict.items():
+                        if variable in run.text:
+                            self.replace_run(record, paragraph, run, variable, value_function_list, numeral_variables,
+                                        html_variables, new_value)
+
+            for doc_sections in template.sections:
+                doc_sections_list = [doc_sections.header,
+                                     doc_sections.footer,
+                                     doc_sections.first_page_header,
+                                     doc_sections.first_page_footer,
+                                     ]
+                for doc_section in doc_sections_list:
+                    for paragraph in doc_section.paragraphs:
+                        for run in paragraph.runs:
+                            for variable, new_value in variables_dict.items():
+                                if variable in run.text:
+                                    self.replace_run(record, paragraph, run, variable, value_function_list, numeral_variables,
+                                                     html_variables, new_value)
+
+                    for table in doc_section.tables:
+                        for row in table.rows:
+                            for cell in row.cells:
+                                runs = cell.paragraphs[0].runs
+                                for run in runs:
+                                    for variable, new_value in variables_dict.items():
+                                        if variable in run.text:
+                                            self.replace_run(record, table, run, variable, value_function_list,
+                                                             numeral_variables,
+                                                             html_variables, new_value)
+
+
+            for table in template.tables:
+                for row in table.rows:
+                    for cell in row.cells:
+                        runs = cell.paragraphs[0].runs
+                        for run in runs:
+                            for variable, new_value in variables_dict.items():
+                                if variable in run.text:
+                                    self.replace_run(record, paragraph, run, variable, value_function_list, numeral_variables,
+                                                     html_variables, new_value)
+                                    # run.text = run.text.replace(variable, eval(new_value))
+                                    # run.font.name = B_NAZANIN
 
 
 
-
-
-
-                # self._replace_and_format(paragraph, '{{employee_name}}', record.employee_id.name or '', bold=True, )
-                # self._replace_and_format(paragraph, '{{نام-کارمند}}', record.employee_id.name or '', bold=True, )
-                # self._replace_and_format(paragraph, '{{employee_father}}', record.employee_id.father_name or '', bold=True, )
-                # self._replace_and_format(paragraph, '{{employee_id_no}}', record.employee_id.identification_id or '', bold=True, )
-                # self._replace_and_format(paragraph, '{{contract_no}}', record.name or '', bold=True, )
-                # self._replace_and_format(paragraph, '{{contract_type}}', record.contract_type_id.name or '', bold=True, )
-                # self._replace_and_format(paragraph, '{{contract_project}}', record.project_name.name or '', bold=True, )
-                # self._replace_and_format(paragraph, '{{contract_subject}}', record.subject or '', bold=True, )
-                # self._replace_and_format(paragraph, '{{موضوع-قرارداد}}', record.subject or '', bold=True, )
-                # self._replace_and_format(paragraph, '{{contract_job}}', record.job_id.name or '', bold=True, )
-                # self._replace_and_format(paragraph, '{{contract_hourly_rate}}', f"{record.hourly_rate}" or '', bold=True, )
-                # self._replace_and_format(paragraph, '{{contract_hourly_rate_text}}', record.hourly_rate_text or '', bold=True, )
-                # self._replace_and_format(paragraph, '{{contract_bond}}', f"{record.bond}" or '', bold=True, )
-                # self._replace_and_format(paragraph, '{{contract_issue_date}}', jdatejs(record.issue_date, J_DATE_FORMAT) or '', bold=True, )
-                # self._replace_and_format(paragraph, '{{contract_start_date}}', jdatejs(record.date_start, J_DATE_FORMAT) or '', bold=True, )
-                # self._replace_and_format(paragraph, '{{contract_end_date}}', jdatejs(record.date_end, J_DATE_FORMAT) or '', bold=True, )
-
-
-
-                # for run in paragraph.runs:
-                #     run.font.name = B_NAZANIN
-
-                html_content += f"<p>{html_escape(paragraph.text)}</p>"
-                # paragraph.text = paragraph.text.replace('{{employee_name}}', record.employee_id.name or '')
-                # paragraph.text = paragraph.text.replace('{{موضوع-قرارداد}}', record.employee_id.name or '')
-                # paragraph.text = paragraph.text.replace('{{company_name}}', self.env.company.name or '')
-                # paragraph.text = paragraph.text.replace('{{start_date}}', str(record.start_date) or '')
-                # paragraph.text = paragraph.text.replace('{{manager_name}}', record.manager_name or '')
-                pass
-            # Step 2: Define placeholders and their replacements
-
-            replacements = {
-                'v_employee_name': record.employee_id.name or '',
-                'v_company_representative': record.representative.name or '',
-            }
-
-            # Step 3: Replace placeholders in the document's tables
-            self.replace_table_placeholders(template, replacements)
-
+            html_content += f"<p>{html_escape(paragraph.text)}</p>"
 
 
             # Save the modified file into a binary field
@@ -179,6 +226,42 @@ class SdHrContractContract(models.Model):
             html_content += "</body></html>"
             pdf_content = self.env['ir.actions.report']._run_wkhtmltopdf([html_content])
             record.output_pdf = base64.b64encode(pdf_content).decode("UTF-8")
+
+    def set_english_font(self, run):
+        text_font = B_NAZANIN
+        run.font.name =  text_font
+        # Set an appropriate English
+        run._element.rPr.rFonts.set(qn('w:eastAsia'), text_font)
+        run.font.size = Pt(12) # Set font size as needed
+
+    def replace_run(self, record, paragraph, run, variable, value_function_list, numeral_variables, html_variables, new_value):
+        try:
+            if variable in value_function_list:
+                run.text = run.text.replace(variable, str(eval(new_value)) or '')
+            else:
+                run.text = run.text.replace(variable, str(new_value) or '')
+
+            if variable in numeral_variables:
+                self.set_english_font(run)
+            elif variable in html_variables:
+                self.add_html_to_paragraph(paragraph, str(eval(new_value)))
+            else:
+                run.font.name = B_NAZANIN
+        except Exception as e:
+            logging.error(f"replace_run > {variable} > {e} ")
+
+    def add_html_to_paragraph(self, paragraph, html):
+        soup = BeautifulSoup(html, 'html.parser')
+
+        for element in soup:
+            if element.name == 'strong':
+                run = paragraph.add_run(element.get_text())
+                run.bold = True
+            elif element.name == 'li':
+                run = paragraph.add_run(f"• {element.get_text()}\n")
+            elif element.name is None:
+                paragraph.add_run(element)
+
 
     def fix_persian(self, date_text):
         """
@@ -256,5 +339,9 @@ class SdHrContractContractType(models.Model):
     name = fields.Char(required=True)
     contract_type = fields.Many2one('hr.contract.type')
     template_file = fields.Binary(string="Template File", required=True, attachment=True)
+
+
+
+
 
 

@@ -5,6 +5,7 @@
         <field name="model">hr.contract.doc_template</field>
         <field name="arch" type="xml">
             <tree editable="bottom">
+                <field name="id"/>
                 <field name="name"/>
                 <field name="contract_type"/>
                 <field name="template_file" widget="binary"/>

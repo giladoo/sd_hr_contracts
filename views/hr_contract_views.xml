@@ -54,6 +54,27 @@
                         </div>
                     </group>
                 </group>
+                <group>
+                    <group string="Payroll">
+                        <field name="pr_base"/>
+                        <field name="pr_absorbent"/>
+                        <field name="pr_job"/>
+                        <field name="pr_marriage"/>
+                        <field name="pr_commute"/>
+                        <field name="pr_other"/>
+                        <field name="pr_children"/>
+                        <field name="pr_housing"/>
+                        <field name="pr_groceries"/>
+                        <field name="pr_rotation"/>
+                        <field name="pr_sum"/>
+                    </group>
+                </group>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Additional Note">
+                    <field name="additional_note" style="direction:rtl !important" />
+
+                </page>
             </xpath>
         </field>
     </record>
