@@ -231,13 +231,42 @@ class SdHrContractContract(models.Model):
     def generate_and_download_docx(self):
         self.regenerate_template()
 
-        download_url = f'/web/hrcontracts/download/?id={self.id}'
-        print(f"""
-        self._name: {self._name}
-        self._origin.id: {self._origin.id}
-    download_url: {download_url}
-""")
-        # download_url = '/web/content/%s/output_file/%s?download=true' % (self.id, self.output_file)
+#         download_url = f'/web/hrcontracts/download/?id={self.id}'
+#         print(f"""
+#         self._name: {self._name}
+#         self._origin.id: {self._origin.id}
+#     download_url: {download_url}
+# """)
+        attachment_model = self.env['ir.attachment']
+        attach_id = attachment_model.search([('res_model', '=', self._name),
+                                             ('res_id', '=', self.id),
+                                             ('res_field', '=', 'output_file'),
+                                             ])
+        logging.warning(f">>>>>>>>>  attach_id {attach_id}")
+        if  len(attach_id) > 1:
+            for rec in attach_id:
+                rec.unlink()
+            attach_id = False
+
+        if attach_id:
+            attach_id.write({
+                'datas': self.output_file,
+                'name': self.output_file_name,
+
+            })
+            logging.warning(f">>>>>>>>> is attach_id")
+        else:
+            logging.warning(f">>>>>>>>> is NOT attach_id")
+            attach_id = attachment_model.create({
+                'res_model': self._name,
+                'res_field': 'output_file',
+                'res_id': self.id,
+                'datas': self.output_file,
+                'name': self.output_file_name,
+                'type': 'binary',
+            })
+
+        download_url = '/web/content/%s' % attach_id.id
         return { 'type': 'ir.actions.act_url',
                  'url': download_url,
                  'target': 'self',
