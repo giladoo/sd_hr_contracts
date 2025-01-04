@@ -7,11 +7,9 @@
         <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
         <field name="arch" type="xml">
             <header>
-
-                <button class="btn btn-primary" name="regenerate_template"
-                        type="object" icon="fa-print">
-                    print
-                    <!--                    <field string="documents" name="document_count" widget="statinfo"/>-->
+                <button class="btn btn-outline-primary" name="generate_and_download_docx"
+                        type="object" icon="fa-file-word-o">
+                    Download .docx
                 </button>
             </header>
 
@@ -21,8 +19,8 @@
                        domain="[('contract_type', '=', contract_type_id)]"/>
                 <field name="output_file_name" invisible="1"/>
                 <field name="output_pdf_name" invisible="1"/>
-                <field name="output_file" widget="binary" readonly="1" filename="output_file_name" style="direction: ltr !important;"/>
-                <field name="output_pdf" widget="binary" readonly="1" filename="output_pdf_name" style="direction: ltr !important;"/>
+                <field name="output_file" widget="binary" invisible="1" readonly="1" filename="output_file_name" style="direction: ltr !important;"/>
+                <field name="output_pdf" widget="binary" invisible="1" readonly="1" filename="output_pdf_name" style="direction: ltr !important;"/>
             </xpath>
             <xpath expr="//div[hasclass('oe_title')]/h1" position="after">
                 <group>

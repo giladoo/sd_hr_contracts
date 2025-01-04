@@ -26,21 +26,22 @@ IRANSansFaNum = 'IRANSansFaNum'
 class SdHrContractContract(models.Model):
     _inherit = 'hr.contract'
 
-    doc_template = fields.Many2one('hr.contract.doc_template')
-    output_file = fields.Binary(string="Generated File", readonly=True, copy=False, )
+    doc_template = fields.Many2one('hr.contract.doc_template', )
+    output_file = fields.Binary(string="Generated File", readonly=False, copy=False,)
     output_file_name = fields.Char(copy=False, )
     output_pdf_name = fields.Char(copy=False, )
     output_pdf = fields.Binary(string="PDF File", readonly=True, copy=False, )
 
     subject = fields.Char(requird=True, translate=True)
-    issue_date = fields.Date(required=True, copy=False, )
-    project_name = fields.Many2one('sd_projects.projects')
-    representative = fields.Many2one('hr.employee')
+    issue_date = fields.Date(required=True, copy=False, default=lambda self: fields.date.today())
+    project_name = fields.Many2one('sd_projects.projects', default=lambda self: self.employee_id.project_name.id or False)
+    # TODO: It must have a default value
+    representative = fields.Many2one('hr.employee', )
 
     # PartTime Contract
     hourly_rate = fields.Integer()
     hourly_rate_text = fields.Char()
-    bond = fields.Integer()
+    bond = fields.Integer(default=10)
 
     # FullTime Contract
     pr_base = fields.Integer()
@@ -69,8 +70,13 @@ class SdHrContractContract(models.Model):
         جمع قرارداد          pr_sum
     '''
 
-
     additional_note = fields.Text(copy=False, )
+
+    @api.onchange('contract_type_id')
+    def contract_type_changed(self):
+        for rec in self:
+            rec.doc_template = rec.doc_template.search([('contract_type', '=', rec.contract_type_id.id)], limit=1).id or False
+
 
     @api.depends('pr_base', 'pr_absorbent', 'pr_job', 'pr_marriage', 'pr_commute', 'pr_other', 'pr_children', 'pr_housing', 'pr_groceries', 'pr_rotation')
     def _pr_sum(self):
@@ -216,6 +222,23 @@ class SdHrContractContract(models.Model):
             html_content += "</body></html>"
             pdf_content = self.env['ir.actions.report']._run_wkhtmltopdf([html_content])
             record.output_pdf = base64.b64encode(pdf_content).decode("UTF-8")
+
+    def generate_and_download_docx(self):
+        self.regenerate_template()
+
+        download_url = f'/web/hrcontracts/download/?id={self.id}'
+        print(f"""
+        self._name: {self._name}
+        self._origin.id: {self._origin.id}
+    download_url: {download_url}
+""")
+        # download_url = '/web/content/%s/output_file/%s?download=true' % (self.id, self.output_file)
+        return { 'type': 'ir.actions.act_url',
+                 'url': download_url,
+                 'target': 'self',
+                 }
+
+
 
     def set_english_font(self, run):
         text_font = B_NAZANIN
