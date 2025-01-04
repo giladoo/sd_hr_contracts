@@ -21,6 +21,8 @@ J_DATE_FORMAT = "%Y/%m/%d"
 B_NAZANIN = 'B Nazanin'
 B_YEKAN = 'B Yekan'
 IRANSansFaNum = 'IRANSansFaNum'
+
+
 class SdHrContractContract(models.Model):
     _inherit = 'hr.contract'
 
