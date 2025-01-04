@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 import logging
 # import pypandoc
 import datetime
@@ -94,6 +95,10 @@ class SdHrContractContract(models.Model):
         :return:
         '''
         for record in self:
+            if not record.doc_template:
+                record.output_file = ''
+                raise ValidationError('There is no template file')
+                continue
             variables = []
             value_function_list = []
             numeral_variables = []

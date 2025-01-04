@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from odoo import http
+from odoo import http, _
 from odoo.http import request, content_disposition
+from odoo.exceptions import ValidationError
 from datetime import datetime, timedelta
 import datetime
 import jdatetime
@@ -25,13 +26,17 @@ class SdHrContractDownload(http.Controller):
             record = contract_model.search([('id', '=', int(res_id))]) if res_id else []
         # print(f'\n   res_id: {res_id} >> record: {record}')
         if record:
-            output_file = base64.b64decode(record.output_file)
-            docx = Document(BytesIO(output_file))
-            buffer = BytesIO()
-            docx.save(buffer)
-            buffer.seek(0)
+            try:
+                output_file = base64.b64decode(record.output_file)
+                docx = Document(BytesIO(output_file))
+                buffer = BytesIO()
+                docx.save(buffer)
+                buffer.seek(0)
+                file_data = buffer.read()
+            except Exception as e:
+                file_data = ''
             # Return the file as a download response
-            res = request.make_response( buffer.read(),
+            res = request.make_response( file_data,
                                           headers=[
                                               ('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'),
                                               ('Content-Disposition', f'attachment; filename={record.output_file_name or "generated_doc.docx"}')
@@ -39,12 +44,6 @@ class SdHrContractDownload(http.Controller):
                                           )
 
         else:
-            res = request.make_response( 'Record Not Found',
-                                          headers=[
-                                              ('Content-Type', 'application/octet-stream'),
-                                              ('Content-Disposition', f'attachment; filename={"not_found.txt"}')
-                                                ]
-                                          )
             res = request.not_found()
 
         return res
