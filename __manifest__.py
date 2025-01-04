@@ -28,5 +28,8 @@
     'demo': [
 
     ],
+	'external_dependencies': {
+    	'python': ['jdatetimext','docx',]
+    },
     'license': 'LGPL-3',
 }
