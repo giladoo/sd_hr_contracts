@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 import logging
-import pypandoc
+# import pypandoc
 import datetime
 import jdatetime
 from jdatetimext import j_start, j_start_end_js, jdatejs
