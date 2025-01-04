@@ -19,15 +19,16 @@
 
                 <field name="doc_template" options="{'no_create': True, 'no_edit': True, 'no_open': True}"
                        domain="[('contract_type', '=', contract_type_id)]"/>
-                <field name="output_file" widget="binary" readonly="1"/>
-                <field name="output_pdf" widget="binary" readonly="1"/>
+                <field name="output_file_name" invisible="1"/>
+                <field name="output_pdf_name" invisible="1"/>
+                <field name="output_file" widget="binary" readonly="1" filename="output_file_name" style="direction: ltr !important;"/>
+                <field name="output_pdf" widget="binary" readonly="1" filename="output_pdf_name" style="direction: ltr !important;"/>
             </xpath>
-            <xpath expr="//field[@name='name']" position="after">
-                <field name="subject"/>
-            </xpath>
-            <xpath expr="//field[@name='employee_id']" position="after">
-                <field name="identification_id"/>
-                <field name="father_name"/>
+            <xpath expr="//div[hasclass('oe_title')]/h1" position="after">
+                <group>
+                    <field name="subject"/>
+
+                </group>
             </xpath>
             <xpath expr="//field[@name='date_start']" position="before">
                 <field name="representative"/>
@@ -72,7 +73,7 @@
             </xpath>
             <xpath expr="//notebook" position="inside">
                 <page string="Additional Note">
-                    <field name="additional_note" style="direction:rtl !important" />
+                    <field name="additional_note" />
 
                 </page>
             </xpath>

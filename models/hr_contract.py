@@ -2,6 +2,8 @@
 from odoo import models, fields, api, _
 import logging
 import pypandoc
+import datetime
+import jdatetime
 from jdatetimext import j_start, j_start_end_js, jdatejs
 from docx import Document
 from docx.shared import Pt, RGBColor
@@ -23,14 +25,14 @@ class SdHrContractContract(models.Model):
     _inherit = 'hr.contract'
 
     doc_template = fields.Many2one('hr.contract.doc_template')
-    output_file = fields.Binary(string="Generated File", readonly=True)
-    output_pdf = fields.Binary(string="PDF File", readonly=True)
+    output_file = fields.Binary(string="Generated File", readonly=True, copy=False, )
+    output_file_name = fields.Char(copy=False, )
+    output_pdf_name = fields.Char(copy=False, )
+    output_pdf = fields.Binary(string="PDF File", readonly=True, copy=False, )
 
     subject = fields.Char(requird=True, translate=True)
-    issue_date = fields.Date(required=True)
-    identification_id = fields.Char(related='employee_id.identification_id')
-    project_name = fields.Many2one('hr.employee.project_name')
-    father_name = fields.Char(related='employee_id.father_name')
+    issue_date = fields.Date(required=True, copy=False, )
+    project_name = fields.Many2one('sd_projects.projects')
     representative = fields.Many2one('hr.employee')
 
     # PartTime Contract
@@ -66,62 +68,44 @@ class SdHrContractContract(models.Model):
     '''
 
 
-    additional_note = fields.Text()
+    additional_note = fields.Text(copy=False, )
 
     @api.depends('pr_base', 'pr_absorbent', 'pr_job', 'pr_marriage', 'pr_commute', 'pr_other', 'pr_children', 'pr_housing', 'pr_groceries', 'pr_rotation')
     def _pr_sum(self):
+        '''
+        Calculates sum of all payroll items
+        :return:
+        '''
         for rec in self:
             rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries  + rec.pr_rotation
 
     def regenerate_template(self):
+        '''
+        Get variables from 'sd_hr.variables' then replaces new_values on the docx document.
+
+        :return:
+        '''
         for record in self:
             variables = []
             value_function_list = []
             numeral_variables = []
             html_variables = []
             variables_dict = {}
+            html_content = ''
             # TODO: to make it general we need to make document template module as a general module.
 
             hr_contract_model = self.env['ir.model'].sudo().search([('model', '=', 'hr.contract')])
-            # print(f">>>>\n  > hr_contract_model:{hr_contract_model}")
             if hr_contract_model:
-
                 variables = self.env['sd_hr.variables'].sudo().search([('model_id', '=', hr_contract_model.id),
+                                                                       ('variable', '!=', False),
                                                                        ('model_res_id', '=', record.doc_template.id)])
-                print(f"  > variables: {variables}")
                 if variables:
                     variables_dict = dict({rec.variable: rec.value_text if rec.value_source == 'text' else rec.value_function for rec in variables})
                     value_function_list = list([rec.variable for rec in variables if rec.value_source == 'function'])
-                    print(f"  > variables_dict: {variables_dict}\n  > value_function_list: {value_function_list}")
 
             # Load the .docx file from the binary field
             template_data = base64.b64decode(record.doc_template.template_file)
             template = Document(BytesIO(template_data))
-            html_content = ''
-
-            # Replace placeholders with actual values
-            variables_dict1 = {'v_employee_name': 'record.employee_id.name',
-                             'v_employee_father': 'record.employee_id.father_name',
-                             'v_employee_title': 'record.employee_id.personal_title.shortcut',
-                             'v_employee_id_no': 'record.employee_id.identification_id',
-                             'v_contract_no': 'record.name',
-                             'v_contract_type': 'record.contract_type_id.name',
-                             'v_contract_project': 'record.project_name.name',
-                             'v_contract_subject': 'record.subject',
-                             'v_contract_job': 'record.job_id.name',
-                             'v_contract_hourly_rate': 'f"{record.hourly_rate:,}"',
-                             'v_contract_hourly_text': 'record.hourly_rate_text',
-                             'v_contract_additional_note': 'record.additional_note',
-                             'v_contract_bond': 'str(record.bond)',
-                             'v_company_representative': 'record.representative.name',
-                             'v_contract_issue_date': 'jdatejs(record.issue_date, J_DATE_FORMAT)',
-                             'v_contract_start_date': ' jdatejs(record.date_start, J_DATE_FORMAT)',
-                             'v_contract_end_date': ' jdatejs(record.date_end, J_DATE_FORMAT)',
-                             }
-            # numeral_variables = list([rec.variable for rec in variables])
-            numeral_variables1 = ['v_contract_no', 'v_contract_issue_date',
-                                 'v_contract_start_date',  'v_contract_end_date',  ]
-            html_variables1 = []
 
             for paragraph in template.paragraphs:
                 for run in paragraph.runs:
@@ -129,6 +113,16 @@ class SdHrContractContract(models.Model):
                         if variable in run.text:
                             self.replace_run(record, paragraph, run, variable, value_function_list, numeral_variables,
                                         html_variables, new_value)
+
+            for table in template.tables:
+                for row in table.rows:
+                    for cell in row.cells:
+                        runs = cell.paragraphs[0].runs
+                        for run in runs:
+                            for variable, new_value in variables_dict.items():
+                                if variable in run.text:
+                                    self.replace_run(record, table, run, variable, value_function_list, numeral_variables,
+                                                     html_variables, new_value)
 
             for doc_sections in template.sections:
                 doc_sections_list = [doc_sections.header,
@@ -156,17 +150,8 @@ class SdHrContractContract(models.Model):
                                                              html_variables, new_value)
 
 
-            for table in template.tables:
-                for row in table.rows:
-                    for cell in row.cells:
-                        runs = cell.paragraphs[0].runs
-                        for run in runs:
-                            for variable, new_value in variables_dict.items():
-                                if variable in run.text:
-                                    self.replace_run(record, paragraph, run, variable, value_function_list, numeral_variables,
-                                                     html_variables, new_value)
-                                    # run.text = run.text.replace(variable, eval(new_value))
-                                    # run.font.name = B_NAZANIN
+
+
 
 
 
@@ -176,6 +161,9 @@ class SdHrContractContract(models.Model):
             # Save the modified file into a binary field
             output_stream = BytesIO()
             template.save(output_stream)
+
+            record.output_file_name = f"{record.with_context(lang='en_US').employee_id.name_cv or 'file'}_{record.name}.docx"
+            record.output_pdf_name = f"{record.with_context(lang='en_US').employee_id.name_cv or 'file'}_{record.name}.pdf"
             record.output_file = base64.b64encode(output_stream.getvalue())
             output_stream.close()
 
@@ -237,14 +225,14 @@ class SdHrContractContract(models.Model):
     def replace_run(self, record, paragraph, run, variable, value_function_list, numeral_variables, html_variables, new_value):
         try:
             if variable in value_function_list:
-                run.text = run.text.replace(variable, str(eval(new_value)) or '')
+                run.text = run.text.replace(variable, str(eval(new_value) or ''))
             else:
                 run.text = run.text.replace(variable, str(new_value) or '')
 
             if variable in numeral_variables:
                 self.set_english_font(run)
             elif variable in html_variables:
-                self.add_html_to_paragraph(paragraph, str(eval(new_value)))
+                self.add_html_to_paragraph(paragraph, str(eval(new_value)  or ''))
             else:
                 run.font.name = B_NAZANIN
         except Exception as e:
@@ -261,7 +249,6 @@ class SdHrContractContract(models.Model):
                 run = paragraph.add_run(f"• {element.get_text()}\n")
             elif element.name is None:
                 paragraph.add_run(element)
-
 
     def fix_persian(self, date_text):
         """
@@ -300,7 +287,6 @@ class SdHrContractContract(models.Model):
                                 run.text = run.text.replace(placeholder, value)
                                 run.font.name = B_NAZANIN
 
-
     def _replace_and_format(self, paragraph, placeholder, value, bold=False, italic=False, font_size=None, color=None):
         """
         Replace a placeholder with formatted text in a paragraph.
@@ -328,7 +314,6 @@ class SdHrContractContract(models.Model):
             # Add text after the placeholder
             if parts[1]:
                 paragraph.add_run(parts[1])
-
 
 
 class SdHrContractContractType(models.Model):
