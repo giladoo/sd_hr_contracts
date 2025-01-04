@@ -24,7 +24,7 @@ class SdHrContractDownload(http.Controller):
         res_id = kwargs.get('id', False)
         if request.env.user.has_group('hr.group_hr_manager'):
             record = contract_model.search([('id', '=', int(res_id))]) if res_id else []
-        logging.info(f'\n   res_id: {res_id} >> record: {record}')
+        logging.info(f'\n\n   res_id: {res_id} >> record: {record}\n')
         if record:
             try:
                 output_file = base64.b64decode(record.output_file)
@@ -34,7 +34,7 @@ class SdHrContractDownload(http.Controller):
                 buffer.seek(0)
                 file_data = buffer.read()
             except Exception as e:
-                logging.error(f"/web/hrcontracts/download/ : rec_id:{record.id} \n ERROR: {e}")
+                logging.error(f"[DOWNLOAD ERROR] : rec_id:{record.id} \n ERROR: {e}\n")
                 file_data = ''
             # Return the file as a download response
             res = request.make_response( file_data,
