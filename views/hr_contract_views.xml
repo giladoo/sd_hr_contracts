@@ -13,6 +13,12 @@
                 </button>
             </header>
 
+            <xpath expr="//field[@name='name']" position="attributes">
+               <attribute name="readonly">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='contract_type_id']" position="attributes">
+               <attribute name="readonly">id != False</attribute>
+            </xpath>
             <xpath expr="//field[@name='hr_responsible_id']" position="after">
 
                 <field name="doc_template" options="{'no_create': True, 'no_edit': True, 'no_open': True}"

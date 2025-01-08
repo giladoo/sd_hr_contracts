@@ -27,6 +27,7 @@ IRANSansFaNum = 'IRANSansFaNum'
 class SdHrContractContract(models.Model):
     _inherit = 'hr.contract'
 
+    name = fields.Char('Reference', copy=False, readonly=True, default=lambda x: _('New'))
     doc_template = fields.Many2one('hr.contract.doc_template', )
     output_file = fields.Binary(string="Generated File", readonly=False, copy=False,)
     output_file_name = fields.Char(copy=False, )
@@ -374,6 +375,26 @@ class SdHrContractContract(models.Model):
             if parts[1]:
                 paragraph.add_run(parts[1])
 
+    def write(self, vals):
+        print(f"\n  >>>   vals: {vals} \n >>>  res: \n")
+        if vals.get('contract_type_id', False):
+            raise ValidationError(_("Contract Type cannot be updated as contract number is based on it."))
+        return super().write(vals)
+
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            print(f"\n >>>>> vals: {vals}\n")
+            if not vals.get('name') or vals['name'] == _('New'):
+                if not vals.get('contract_type_id'):
+                    raise ValidationError(_("Please select a 'Contract Type'"))
+                contract_type = self.env['hr.contract.type'].browse(int(vals.get('contract_type_id')))
+                year = jdatejs()[0:4]
+
+                contract_no = self.env['ir.sequence'].next_by_code('sd_hr.contracts.name') or _('New')
+                vals['name'] = f"{contract_type.code}{year}/{contract_no}"
+        return super().create(vals_list)
 
 class SdHrContractContractType(models.Model):
     _name = 'hr.contract.doc_template'

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequences for lead mining requests -->
+        <record id="ir_sequence_hr_employee" model="ir.sequence">
+            <field name="name">SD HR Contracts</field>
+            <field name="code">sd_hr.contracts.name</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_next_actual">2000</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>
