@@ -39,7 +39,7 @@ class SdHrContractContract(models.Model):
     project_name = fields.Many2one('sd_projects.projects', default=lambda self: self.employee_id.project_name.id or False)
     # TODO: It must have a default value
     representative = fields.Many2one('hr.employee', )
-
+    contract_type_id_payment = fields.Selection(related='contract_type_id.payment')
     # PartTime Contract
     hourly_rate = fields.Integer()
     hourly_rate_text = fields.Char()
@@ -80,14 +80,22 @@ class SdHrContractContract(models.Model):
             rec.doc_template = rec.doc_template.search([('contract_type', '=', rec.contract_type_id.id)], limit=1).id or False
 
 
-    @api.depends('pr_base', 'pr_absorbent', 'pr_job', 'pr_marriage', 'pr_commute', 'pr_other', 'pr_children', 'pr_housing', 'pr_groceries', 'pr_rotation')
+    @api.depends('contract_type_id','pr_base', 'pr_absorbent', 'pr_job', 'pr_marriage', 'pr_commute', 'pr_other', 'pr_children', 'pr_housing', 'pr_groceries', 'pr_rotation')
     def _pr_sum(self):
         '''
         Calculates sum of all payroll items
         :return:
         '''
         for rec in self:
-            rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries  + rec.pr_rotation
+            if rec.contract_type_id_payment == 'monthly':
+                rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries
+            elif rec.contract_type_id_payment == 'rotational':
+                rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries  + rec.pr_rotation
+            elif rec.contract_type_id_payment == 'retired':
+                rec.pr_sum = rec.pr_base
+            else:
+                rec.pr_sum = 0
+
 
     def regenerate_template(self):
         '''
@@ -396,7 +404,7 @@ class SdHrContractContract(models.Model):
                 vals['name'] = f"{contract_type.code}{year}/{contract_no}"
         return super().create(vals_list)
 
-class SdHrContractContractType(models.Model):
+class SdHrContractContractDocTemplate(models.Model):
     _name = 'hr.contract.doc_template'
     _description = "Keep contract type templates"
 
@@ -407,6 +415,18 @@ class SdHrContractContractType(models.Model):
 
 
 
+
+class SdHrContractContractType(models.Model):
+    _inherit = 'hr.contract.type'
+
+
+    payment = fields.Selection([('monthly', 'Monthly'),
+                                ('hourly', 'Hourly'),
+                                ('rotational', 'Rotational'),
+                                ('retired', 'Retired'),
+                                ('trainee', 'Trainee'),
+                                ],
+                               default="monthly", required=True)
 
 
 

@@ -14,10 +14,16 @@
             </header>
 
             <xpath expr="//field[@name='name']" position="attributes">
-               <attribute name="readonly">True</attribute>
+               <attribute name="readonly">False</attribute>
+            </xpath>
+            <xpath expr="//field[@name='wage']" position="attributes">
+               <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//div[@name='wage_period_label']" position="attributes">
+               <attribute name="invisible">True</attribute>
             </xpath>
             <xpath expr="//field[@name='contract_type_id']" position="attributes">
-               <attribute name="readonly">id != False</attribute>
+<!--               <attribute name="readonly">id != False</attribute>-->
             </xpath>
             <xpath expr="//field[@name='hr_responsible_id']" position="after">
 
@@ -43,39 +49,42 @@
             </xpath>
             <xpath expr="//field[@name='resource_calendar_id']" position="after">
             </xpath>
-            <xpath expr="//page[@name='information']" position="inside">
-                <group name="hourly_rate_info" string="Hourly Rate">
-                    <group name="Hourly Rate">
+            <xpath expr="//page[@name='information']/group[@name='salary_info']" position="before">
+                <field name="contract_type_id_payment" invisible="1"/>
+                <group name="hourly_rate_info"  invisible="contract_type_id_payment != 'hourly'">
+                    <separator  string="Hourly Rate"  class="ps-2 text-bg-secondary"/>
+                    <group>
                         <label for="hourly_rate"/>
                         <div class="o_row mw-50" name="hourly_rate">
                             <field name="hourly_rate" class="oe_inline o_hr_narrow_field" nolabel="1"/>
-                            <div class="mb-3" name="_period_label">/ Hour</div>
+                            <div class="mb-3 ms-5" name="_period_label">/ Hour</div>
                         </div>
                         <field name="hourly_rate_text"/>
                         <label for="bond"/>
                         <div class="o_row mw-50" name="bond">
                             <field name="bond" class="oe_inline o_hr_narrow_field" nolabel="1"/>
-                            <div class="mb-3" name="bond_period_label"> % </div>
+                            <div class="mb-3 ms-5" name="bond_period_label"> % </div>
                         </div>
                     </group>
                 </group>
-                <group>
-                    <group string="Payroll">
+                <group invisible="contract_type_id_payment not in ['monthly', 'rotational', 'retired']">
+                    <group>
+                        <separator  string="Payroll"  class="ps-2 text-bg-secondary"/>
+                        <field name="pr_sum" class="ps-2 text-bg-700"/>
                         <field name="pr_base"/>
-                        <field name="pr_absorbent"/>
-                        <field name="pr_job"/>
-                        <field name="pr_marriage"/>
-                        <field name="pr_commute"/>
-                        <field name="pr_other"/>
-                        <field name="pr_children"/>
-                        <field name="pr_housing"/>
-                        <field name="pr_groceries"/>
-                        <field name="pr_rotation"/>
-                        <field name="pr_sum"/>
+                        <field name="pr_absorbent" invisible="contract_type_id_payment == 'retired'"/>
+                        <field name="pr_job" invisible="contract_type_id_payment == 'retired'"/>
+                        <field name="pr_marriage" invisible="contract_type_id_payment == 'retired'"/>
+                        <field name="pr_commute" invisible="contract_type_id_payment == 'retired'"/>
+                        <field name="pr_other" invisible="contract_type_id_payment == 'retired'"/>
+                        <field name="pr_children" invisible="contract_type_id_payment == 'retired'"/>
+                        <field name="pr_housing" invisible="contract_type_id_payment == 'retired'"/>
+                        <field name="pr_groceries" invisible="contract_type_id_payment == 'retired'"/>
+                        <field name="pr_rotation" invisible="contract_type_id_payment in ['retired', 'monthly']"/>
                     </group>
                 </group>
             </xpath>
-            <xpath expr="//notebook" position="inside">
+            <xpath expr="//page[@name='information']" position="after">
                 <page string="Additional Note">
                     <field name="additional_note" />
 
@@ -84,4 +93,15 @@
         </field>
     </record>
 
+    <record id="hr_contract_type_view_tree_inherit" model="ir.ui.view">
+        <field name="name">Add payment field</field>
+        <field name="model">hr.contract.type</field>
+        <field name="inherit_id" ref="hr.hr_contract_type_view_tree"/>
+        <field name="arch" type="xml">
+
+        <xpath expr="//tree">
+            <field name="payment"/>
+        </xpath>
+        </field>
+    </record>
 </odoo>
