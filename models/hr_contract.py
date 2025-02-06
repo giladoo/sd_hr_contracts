@@ -184,8 +184,15 @@ class SdHrContractContract(models.Model):
             output_stream = BytesIO()
             template.save(output_stream)
 
-            record.output_file_name = f"{record.with_context(lang='en_US').employee_id.name_cv or 'file'}_{record.name}.docx"
-            record.output_pdf_name = f"{record.with_context(lang='en_US').employee_id.name_cv or 'file'}_{record.name}.pdf"
+            try:
+
+                record.output_file_name = f"{record.with_context(lang='en_US').employee_id.name_cv or 'file'}_{record.name}.docx"
+                record.output_pdf_name = f"{record.with_context(lang='en_US').employee_id.name_cv or 'file'}_{record.name}.pdf"
+            except:
+                record.output_file_name = f"{record.with_context(lang='en_US').employee_id.name or 'file'}_{record.name}.docx"
+                record.output_pdf_name = f"{record.with_context(lang='en_US').employee_id.name or 'file'}_{record.name}.pdf"
+
+
             record.output_file = base64.b64encode(output_stream.getvalue())
             output_stream.close()
 
