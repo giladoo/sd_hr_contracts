@@ -93,13 +93,13 @@
         </field>
     </record>
 
-    <record id="hr_contract_type_view_tree_inherit" model="ir.ui.view">
+    <record id="hr_contract_type_view_list_inherit" model="ir.ui.view">
         <field name="name">Add payment field</field>
         <field name="model">hr.contract.type</field>
         <field name="inherit_id" ref="hr.hr_contract_type_view_tree"/>
         <field name="arch" type="xml">
 
-        <xpath expr="//tree">
+        <xpath expr="//list">
             <field name="payment"/>
         </xpath>
         </field>
