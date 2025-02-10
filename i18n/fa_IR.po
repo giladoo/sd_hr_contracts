@@ -4,17 +4,17 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0e\n"
+"Project-Id-Version: Odoo Server 17.0-20241108\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-04 14:30+0000\n"
-"PO-Revision-Date: 2025-01-04 18:08+0330\n"
+"POT-Creation-Date: 2025-02-10 06:30+0000\n"
+"PO-Revision-Date: 2025-02-10 10:04+0330\n"
 "Last-Translator: Arash Homayounfar <homayounfar@msn.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
-"Language: fa\n"
+"Language: fa_IR\n"
 "X-Generator: Poedit 2.2\n"
 
 #. module: sd_hr_contracts
@@ -24,7 +24,6 @@ msgstr "هر ساعت"
 
 #. module: sd_hr_contracts
 #. odoo-javascript
-#: code:addons/custom/addons/sd_hr_contracts/static/src/components/fields/attachment_button.js:0
 #: code:addons/sd_hr_contracts/static/src/components/fields/attachment_button.js:0
 #, python-format
 msgid "Add Attachment"
@@ -38,7 +37,6 @@ msgstr "توضیحات اضافه"
 
 #. module: sd_hr_contracts
 #. odoo-javascript
-#: code:addons/custom/addons/sd_hr_contracts/static/src/components/fields/attachment_button.xml:0
 #: code:addons/sd_hr_contracts/static/src/components/fields/attachment_button.xml:0
 #, python-format
 msgid "Attach files"
@@ -50,13 +48,26 @@ msgid "Bond"
 msgstr "حسن انجام کار"
 
 #. module: sd_hr_contracts
-#: model:ir.ui.menu,name:sd_hr_contracts.doc_template_menu
-msgid "Contract Templates"
-msgstr ""
+#: model:ir.model,name:sd_hr_contracts.model_hr_contract
+msgid "Contract"
+msgstr "قرارداد کارمند"
 
 #. module: sd_hr_contracts
+#: model:ir.ui.menu,name:sd_hr_contracts.doc_template_menu
+msgid "Contract Templates"
+msgstr "الگوی قرارداد"
+
+#. module: sd_hr_contracts
+#: model:ir.model,name:sd_hr_contracts.model_hr_contract_type
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__contract_type
 msgid "Contract Type"
+msgstr "نوع قرارداد"
+
+#. module: sd_hr_contracts
+#. odoo-python
+#: code:addons/sd_hr_contracts/models/hr_contract.py:0
+#, python-format
+msgid "Contract Type cannot be updated as contract number is based on it."
 msgstr ""
 
 #. module: sd_hr_contracts
@@ -78,16 +89,15 @@ msgstr ""
 #: model:ir.actions.act_window,name:sd_hr_contracts.doc_template_action
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__doc_template
 msgid "Doc Template"
+msgstr "الگوها"
+
+#. module: sd_hr_contracts
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.hr_contract_view_form_inherit_sd_hr_contracts
+msgid "Download .docx"
 msgstr ""
 
 #. module: sd_hr_contracts
-#: model:ir.model,name:sd_hr_contracts.model_hr_contract
-msgid "Employee Contract"
-msgstr "قرارداد کارمند"
-
-#. module: sd_hr_contracts
 #. odoo-python
-#: code:addons/custom/addons/sd_hr_contracts/models/models.py:0
 #: code:addons/sd_hr_contracts/models/models.py:0
 #, python-format
 msgid "Expire date is not correct."
@@ -96,6 +106,11 @@ msgstr "تاریخ انقضا درست نیست"
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__output_file
 msgid "Generated File"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__hr_contract_type__payment__hourly
+msgid "Hourly"
 msgstr ""
 
 #. module: sd_hr_contracts
@@ -121,7 +136,6 @@ msgstr ""
 
 #. module: sd_hr_contracts
 #. odoo-python
-#: code:addons/custom/addons/sd_hr_contracts/models/models.py:0
 #: code:addons/sd_hr_contracts/models/models.py:0
 #, python-format
 msgid "Issue date cannot be after today's date."
@@ -143,8 +157,20 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__hr_contract_type__payment__monthly
+msgid "Monthly"
+msgstr ""
+
+#. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__name
 msgid "Name"
+msgstr "نام"
+
+#. module: sd_hr_contracts
+#. odoo-python
+#: code:addons/sd_hr_contracts/models/hr_contract.py:0
+#, python-format
+msgid "New"
 msgstr ""
 
 #. module: sd_hr_contracts
@@ -163,9 +189,22 @@ msgid "PDF File"
 msgstr ""
 
 #. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__contract_type_id_payment
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_type__payment
+msgid "Payment"
+msgstr ""
+
+#. module: sd_hr_contracts
 #: model_terms:ir.ui.view,arch_db:sd_hr_contracts.hr_contract_view_form_inherit_sd_hr_contracts
 msgid "Payroll"
 msgstr "حقوق"
+
+#. module: sd_hr_contracts
+#. odoo-python
+#: code:addons/sd_hr_contracts/models/hr_contract.py:0
+#, python-format
+msgid "Please select a 'Contract Type'"
+msgstr ""
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_absorbent
@@ -176,6 +215,11 @@ msgstr "فوق العاده جذب"
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_base
 msgid "Pr Base"
 msgstr "حقوق پایه"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_bonus
+msgid "Pr Bonus"
+msgstr "پاداش و بهره وری"
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_children
@@ -228,9 +272,24 @@ msgid "Project Name"
 msgstr "نام پروژه"
 
 #. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__name
+msgid "Reference"
+msgstr "منبع قرارداد"
+
+#. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__representative
 msgid "Representative"
 msgstr "نماینده شرکت"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__hr_contract_type__payment__retired
+msgid "Retired"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__hr_contract_type__payment__rotational
+msgid "Rotational"
+msgstr ""
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__subject
@@ -240,19 +299,17 @@ msgstr "موضوع"
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__template_file
 msgid "Template File"
+msgstr "فایل الگو"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields.selection,name:sd_hr_contracts.selection__hr_contract_type__payment__trainee
+msgid "Trainee"
 msgstr ""
 
 #. module: sd_hr_contracts
 #. odoo-python
-#: code:addons/custom/addons/sd_hr_contracts/models/hr_employee.py:0
-#: code:addons/custom/addons/sd_hr_contracts/models/models.py:0
 #: code:addons/sd_hr_contracts/models/hr_employee.py:0
 #: code:addons/sd_hr_contracts/models/models.py:0
 #, python-format
 msgid "documents"
 msgstr "مستندات"
-
-#. module: sd_hr_contracts
-#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.hr_contract_view_form_inherit_sd_hr_contracts
-msgid "print"
-msgstr ""
