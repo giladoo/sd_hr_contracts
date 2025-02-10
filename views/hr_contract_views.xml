@@ -80,6 +80,7 @@
                         <field name="pr_children" invisible="contract_type_id_payment == 'retired'"/>
                         <field name="pr_housing" invisible="contract_type_id_payment == 'retired'"/>
                         <field name="pr_groceries" invisible="contract_type_id_payment == 'retired'"/>
+                        <field name="pr_bonus" invisible="contract_type_id_payment == 'retired'"/>
                         <field name="pr_rotation" invisible="contract_type_id_payment in ['retired', 'monthly']"/>
                     </group>
                 </group>

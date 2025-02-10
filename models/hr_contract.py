@@ -55,6 +55,7 @@ class SdHrContractContract(models.Model):
     pr_children = fields.Integer()
     pr_housing = fields.Integer()
     pr_groceries = fields.Integer()
+    pr_bonus = fields.Integer()
     pr_rotation = fields.Integer()
     pr_sum = fields.Integer(compute='_pr_sum', store=True)
 
@@ -68,6 +69,7 @@ class SdHrContractContract(models.Model):
         حق اولاد     pr_children
         حق مسکن      pr_housing
         بن و خواروبار    pr_groceries
+        پاداش و بهره وری     pr_bonus
         فوق العاده اقماری     pr_rotation
         جمع قرارداد          pr_sum
     '''
@@ -88,9 +90,9 @@ class SdHrContractContract(models.Model):
         '''
         for rec in self:
             if rec.contract_type_id_payment == 'monthly':
-                rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries
+                rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries + rec.pr_bonus
             elif rec.contract_type_id_payment == 'rotational':
-                rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries  + rec.pr_rotation
+                rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries  + rec.pr_bonus + rec.pr_rotation
             elif rec.contract_type_id_payment == 'retired':
                 rec.pr_sum = rec.pr_base
             else:
