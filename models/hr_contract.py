@@ -322,11 +322,10 @@ class SdHrContractContract(models.Model):
     def set_english_font(self, run, font_name=B_NAZANIN):
         run.font.name =  font_name
         # Set an appropriate English
-        run._element.rPr.rFonts.set(qn('w:eastAsia'), font_name)
+        # run._element.rPr.rFonts.set(qn('w:eastAsia'), font_name)
         run.font.size = Pt(12) # Set font size as needed
 
     def replace_run(self, record, paragraph, run, variable, value_function_list, numeral_variables, html_variables, new_value, font_name=B_NAZANIN):
-        ic(font_name)
         try:
             if variable in value_function_list:
                 run.text = run.text.replace(variable, str(eval(new_value) or ''))
@@ -334,25 +333,30 @@ class SdHrContractContract(models.Model):
                 run.text = run.text.replace(variable, str(new_value) or '')
 
             if variable in numeral_variables:
-                self.set_english_font(run)
+                self.set_english_font(run, font_name)
             elif variable in html_variables:
-                self.add_html_to_paragraph(paragraph, str(eval(new_value)  or ''))
+                self.add_html_to_paragraph(paragraph, str(eval(new_value)  or ''), font_name)
             else:
                 run.font.name = font_name
         except Exception as e:
             logging.error(f"replace_run > {variable} > {e} ")
 
-    def add_html_to_paragraph(self, paragraph, html):
+    def add_html_to_paragraph(self, paragraph, html, font_name=B_NAZANIN):
         soup = BeautifulSoup(html, 'html.parser')
 
         for element in soup:
             if element.name == 'strong':
                 run = paragraph.add_run(element.get_text())
                 run.bold = True
+                run.font.name = font_name
+
             elif element.name == 'li':
                 run = paragraph.add_run(f"• {element.get_text()}\n")
+                run.font.name = font_name
+
             elif element.name is None:
-                paragraph.add_run(element)
+                run = paragraph.add_run(element)
+                run.font.name = font_name
 
     def fix_persian(self, date_text):
         """
