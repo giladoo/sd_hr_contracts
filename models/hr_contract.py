@@ -39,6 +39,7 @@ class SdHrContractContract(models.Model):
     project_name = fields.Many2one('sd_projects.projects', default=lambda self: self.employee_id.project_name.id or False)
     # TODO: It must have a default value
     representative = fields.Many2one('hr.employee', )
+    manager = fields.Many2one('hr.employee', )
     contract_type_id_payment = fields.Selection(related='contract_type_id.payment')
     # PartTime Contract
     hourly_rate = fields.Integer()
@@ -57,6 +58,13 @@ class SdHrContractContract(models.Model):
     pr_groceries = fields.Integer()
     pr_bonus = fields.Integer()
     pr_rotation = fields.Integer()
+
+    pr_friday_work = fields.Integer()
+    pr_over_time = fields.Integer()
+    pr_shift_work = fields.Integer()
+    pr_environment_bonus = fields.Integer()
+    pr_onshore_rig_bonus = fields.Integer()
+
     pr_sum = fields.Integer(compute='_pr_sum', store=True)
 
     '''
@@ -90,9 +98,31 @@ class SdHrContractContract(models.Model):
         '''
         for rec in self:
             if rec.contract_type_id_payment == 'monthly':
-                rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries + rec.pr_bonus
+                rec.pr_sum = (rec.pr_base +
+                              rec.pr_absorbent  +
+                              rec.pr_job  +
+                              rec.pr_marriage  +
+                              rec.pr_commute  +
+                              rec.pr_other  +
+                              rec.pr_children  +
+                              rec.pr_housing  +
+                              rec.pr_groceries +
+                              rec.pr_bonus)
             elif rec.contract_type_id_payment == 'rotational':
-                rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries  + rec.pr_bonus + rec.pr_rotation
+                rec.pr_sum = (rec.pr_base +
+                              rec.pr_absorbent  +
+                              rec.pr_job  +
+                              rec.pr_marriage  +
+                              rec.pr_children  +
+                              rec.pr_housing  +
+                              rec.pr_groceries  +
+                              rec.pr_friday_work +
+                              rec.pr_over_time +
+                              rec.pr_shift_work +
+                              rec.pr_environment_bonus +
+                              rec.pr_onshore_rig_bonus +
+                              rec.pr_rotation)
+
             elif rec.contract_type_id_payment == 'retired':
                 rec.pr_sum = rec.pr_base
             else:
