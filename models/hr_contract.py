@@ -16,12 +16,13 @@ import os
 from tempfile import NamedTemporaryFile
 from odoo.tools import html_escape
 from bs4 import BeautifulSoup
-
+from icecream import ic
 
 J_DATE_FORMAT = "%Y/%m/%d"
 B_NAZANIN = 'B Nazanin'
 B_YEKAN = 'B Yekan'
 IRANSansFaNum = 'IRANSansFaNum'
+ARIAL = 'Arial'
 
 
 class SdHrContractContract(models.Model):
@@ -128,6 +129,9 @@ class SdHrContractContract(models.Model):
             else:
                 rec.pr_sum = 0
 
+    def get_select(self, rec, field_name):
+        field_name = dict(rec._fields[field_name]._description_selection(self.env)).get(rec[field_name])
+        return field_name
 
     def regenerate_template(self):
         '''
@@ -154,7 +158,7 @@ class SdHrContractContract(models.Model):
                                                                        ('variable', '!=', False),
                                                                        ('model_res_id', '=', record.doc_template.id)])
                 if variables:
-                    variables_dict = dict({rec.variable: rec.value_text if rec.value_source == 'text' else rec.value_function for rec in variables})
+                    variables_dict = dict({rec.variable: (rec.value_text, self.get_select(rec, 'value_fonts')) if rec.value_source == 'text' else (rec.value_function, self.get_select(rec, 'value_fonts')) for rec in variables})
                     value_function_list = list([rec.variable for rec in variables if rec.value_source == 'function'])
 
             # Load the .docx file from the binary field
@@ -166,7 +170,7 @@ class SdHrContractContract(models.Model):
                     for variable, new_value in variables_dict.items():
                         if variable in run.text:
                             self.replace_run(record, paragraph, run, variable, value_function_list, numeral_variables,
-                                        html_variables, new_value)
+                                        html_variables, new_value[0], new_value[1] )
 
             for table in template.tables:
                 for row in table.rows:
@@ -176,7 +180,7 @@ class SdHrContractContract(models.Model):
                             for variable, new_value in variables_dict.items():
                                 if variable in run.text:
                                     self.replace_run(record, table, run, variable, value_function_list, numeral_variables,
-                                                     html_variables, new_value)
+                                                     html_variables, new_value[0], new_value[1])
 
             for doc_sections in template.sections:
                 doc_sections_list = [doc_sections.header,
@@ -190,7 +194,7 @@ class SdHrContractContract(models.Model):
                             for variable, new_value in variables_dict.items():
                                 if variable in run.text:
                                     self.replace_run(record, paragraph, run, variable, value_function_list, numeral_variables,
-                                                     html_variables, new_value)
+                                                     html_variables, new_value[0], new_value[1])
 
                     for table in doc_section.tables:
                         for row in table.rows:
@@ -201,7 +205,7 @@ class SdHrContractContract(models.Model):
                                         if variable in run.text:
                                             self.replace_run(record, table, run, variable, value_function_list,
                                                              numeral_variables,
-                                                             html_variables, new_value)
+                                                             html_variables, new_value[0], new_value[1])
 
 
 
@@ -315,14 +319,14 @@ class SdHrContractContract(models.Model):
 
 
 
-    def set_english_font(self, run):
-        text_font = B_NAZANIN
-        run.font.name =  text_font
+    def set_english_font(self, run, font_name=B_NAZANIN):
+        run.font.name =  font_name
         # Set an appropriate English
-        run._element.rPr.rFonts.set(qn('w:eastAsia'), text_font)
+        run._element.rPr.rFonts.set(qn('w:eastAsia'), font_name)
         run.font.size = Pt(12) # Set font size as needed
 
-    def replace_run(self, record, paragraph, run, variable, value_function_list, numeral_variables, html_variables, new_value):
+    def replace_run(self, record, paragraph, run, variable, value_function_list, numeral_variables, html_variables, new_value, font_name=B_NAZANIN):
+        ic(font_name)
         try:
             if variable in value_function_list:
                 run.text = run.text.replace(variable, str(eval(new_value) or ''))
@@ -334,7 +338,7 @@ class SdHrContractContract(models.Model):
             elif variable in html_variables:
                 self.add_html_to_paragraph(paragraph, str(eval(new_value)  or ''))
             else:
-                run.font.name = B_NAZANIN
+                run.font.name = font_name
         except Exception as e:
             logging.error(f"replace_run > {variable} > {e} ")
 
@@ -370,7 +374,8 @@ class SdHrContractContract(models.Model):
         # return f"{rtl_override}{text}{pop_directional}"
         return f"{text}{pop_directional}"
 
-    def replace_table_placeholders(self, document, replacements):
+
+    def replace_table_placeholders(self, document, replacements, font_name=B_NAZANIN):
         """
         Replaces placeholders in tables within a Word document.
         :param document: Document object
@@ -385,9 +390,10 @@ class SdHrContractContract(models.Model):
                         for placeholder, value in replacements.items():
                             if placeholder in run.text:
                                 run.text = run.text.replace(placeholder, value)
-                                run.font.name = B_NAZANIN
+                                run.font.name = font_name
 
-    def _replace_and_format(self, paragraph, placeholder, value, bold=False, italic=False, font_size=None, color=None):
+
+    def _replace_and_format(self, paragraph, placeholder, value, bold=False, font_name=B_NAZANIN, italic=False, font_size=None, color=None):
         """
         Replace a placeholder with formatted text in a paragraph.
         """
@@ -410,13 +416,13 @@ class SdHrContractContract(models.Model):
                 run.font.size = Pt(font_size)
             if color:
                 run.font.color.rgb = RGBColor(*color)  # RGB tuple
-            run.font.name = B_NAZANIN
+            run.font.name = font_name
             # Add text after the placeholder
             if parts[1]:
                 paragraph.add_run(parts[1])
 
     def write(self, vals):
-        print(f"\n  >>>   vals: {vals} \n >>>  res: \n")
+        # print(f"\n  >>>   vals: {vals} \n >>>  res: \n")
         if vals.get('contract_type_id', False):
             raise ValidationError(_("Contract Type cannot be updated as contract number is based on it."))
         return super().write(vals)
@@ -425,7 +431,7 @@ class SdHrContractContract(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            print(f"\n >>>>> vals: {vals}\n")
+            # print(f"\n >>>>> vals: {vals}\n")
             if not vals.get('name') or vals['name'] == _('New'):
                 if not vals.get('contract_type_id'):
                     raise ValidationError(_("Please select a 'Contract Type'"))
