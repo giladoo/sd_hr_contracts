@@ -4,17 +4,17 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0-20241108\n"
+"Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-10 06:30+0000\n"
-"PO-Revision-Date: 2025-02-10 10:04+0330\n"
+"POT-Creation-Date: 2025-04-23 05:19+0000\n"
+"PO-Revision-Date: 2025-04-23 08:56+0330\n"
 "Last-Translator: Arash Homayounfar <homayounfar@msn.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
-"Language: fa_IR\n"
+"Language: fa\n"
 "X-Generator: Poedit 2.2\n"
 
 #. module: sd_hr_contracts
@@ -94,7 +94,7 @@ msgstr "الگوها"
 #. module: sd_hr_contracts
 #: model_terms:ir.ui.view,arch_db:sd_hr_contracts.hr_contract_view_form_inherit_sd_hr_contracts
 msgid "Download .docx"
-msgstr ""
+msgstr "دانلود docx"
 
 #. module: sd_hr_contracts
 #. odoo-python
@@ -111,7 +111,7 @@ msgstr ""
 #. module: sd_hr_contracts
 #: model:ir.model.fields.selection,name:sd_hr_contracts.selection__hr_contract_type__payment__hourly
 msgid "Hourly"
-msgstr ""
+msgstr "ساعتی"
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__hourly_rate
@@ -132,14 +132,14 @@ msgstr ""
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__issue_date
 msgid "Issue Date"
-msgstr ""
+msgstr "تاریخ استخدام"
 
 #. module: sd_hr_contracts
 #. odoo-python
 #: code:addons/sd_hr_contracts/models/models.py:0
 #, python-format
 msgid "Issue date cannot be after today's date."
-msgstr ""
+msgstr "تاریخ استخدام نمی تواند بعد از امروز باشد."
 
 #. module: sd_hr_contracts
 #: model:ir.model,name:sd_hr_contracts.model_hr_contract_doc_template
@@ -157,9 +157,14 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__manager
+msgid "Manager"
+msgstr "مدیر"
+
+#. module: sd_hr_contracts
 #: model:ir.model.fields.selection,name:sd_hr_contracts.selection__hr_contract_type__payment__monthly
 msgid "Monthly"
-msgstr ""
+msgstr "ماهیانه"
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__name
@@ -192,7 +197,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__contract_type_id_payment
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_type__payment
 msgid "Payment"
-msgstr ""
+msgstr "پرداخت"
 
 #. module: sd_hr_contracts
 #: model_terms:ir.ui.view,arch_db:sd_hr_contracts.hr_contract_view_form_inherit_sd_hr_contracts
@@ -204,7 +209,7 @@ msgstr "حقوق"
 #: code:addons/sd_hr_contracts/models/hr_contract.py:0
 #, python-format
 msgid "Please select a 'Contract Type'"
-msgstr ""
+msgstr "لطفا نوع قرارداد را انتخاب کنید."
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_absorbent
@@ -232,6 +237,16 @@ msgid "Pr Commute"
 msgstr "اباب و ذهاب"
 
 #. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_environment_bonus
+msgid "Pr Environment Bonus"
+msgstr "فوق العاده کار/محیط کار"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_friday_work
+msgid "Pr Friday Work"
+msgstr "جمعه کاری"
+
+#. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_groceries
 msgid "Pr Groceries"
 msgstr "بن خوار و بار"
@@ -252,9 +267,19 @@ msgid "Pr Marriage"
 msgstr "حق تاهل"
 
 #. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_onshore_rig_bonus
+msgid "Pr Onshore Rig Bonus"
+msgstr "حق ریگ حفاری"
+
+#. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_other
 msgid "Pr Other"
 msgstr "سایر مزایا"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_over_time
+msgid "Pr Over Time"
+msgstr "اضافه کاری"
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_rotation
@@ -262,9 +287,19 @@ msgid "Pr Rotation"
 msgstr "فوق العاده اقماری"
 
 #. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_shift_work
+msgid "Pr Shift Work"
+msgstr "نوبت کاری"
+
+#. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_sum
 msgid "Pr Sum"
 msgstr "جمع قرارداد"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_yearly_raise
+msgid "Pr Yearly Raise"
+msgstr "پایه سنوات"
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__project_name
@@ -284,12 +319,12 @@ msgstr "نماینده شرکت"
 #. module: sd_hr_contracts
 #: model:ir.model.fields.selection,name:sd_hr_contracts.selection__hr_contract_type__payment__retired
 msgid "Retired"
-msgstr ""
+msgstr "بارنشست"
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields.selection,name:sd_hr_contracts.selection__hr_contract_type__payment__rotational
 msgid "Rotational"
-msgstr ""
+msgstr "اقماری"
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__subject
@@ -304,7 +339,7 @@ msgstr "فایل الگو"
 #. module: sd_hr_contracts
 #: model:ir.model.fields.selection,name:sd_hr_contracts.selection__hr_contract_type__payment__trainee
 msgid "Trainee"
-msgstr ""
+msgstr "کار آموز"
 
 #. module: sd_hr_contracts
 #. odoo-python
