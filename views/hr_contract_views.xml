@@ -81,6 +81,7 @@
                         <field name="pr_children" invisible="contract_type_id_payment == 'retired'"/>
                         <field name="pr_housing" invisible="contract_type_id_payment == 'retired'"/>
                         <field name="pr_groceries" invisible="contract_type_id_payment == 'retired'"/>
+                        <field name="pr_yearly_raise" invisible="contract_type_id_payment == 'retired'"/>
                         <field name="pr_friday_work" invisible="contract_type_id_payment == 'retired'"/>
                         <field name="pr_over_time" invisible="contract_type_id_payment == 'retired'"/>
                         <field name="pr_shift_work" invisible="contract_type_id_payment == 'retired'"/>

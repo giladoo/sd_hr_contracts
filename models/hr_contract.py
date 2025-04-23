@@ -57,6 +57,7 @@ class SdHrContractContract(models.Model):
     pr_children = fields.Integer()
     pr_housing = fields.Integer()
     pr_groceries = fields.Integer()
+    pr_yearly_raise = fields.Integer()
     pr_bonus = fields.Integer()
     pr_rotation = fields.Integer()
 
@@ -91,7 +92,9 @@ class SdHrContractContract(models.Model):
             rec.doc_template = rec.doc_template.search([('contract_type', '=', rec.contract_type_id.id)], limit=1).id or False
 
 
-    @api.depends('contract_type_id','pr_base', 'pr_absorbent', 'pr_job', 'pr_marriage', 'pr_commute', 'pr_other', 'pr_children', 'pr_housing', 'pr_groceries', 'pr_rotation')
+    @api.depends('contract_type_id','pr_base',
+                 'pr_absorbent', 'pr_job', 'pr_marriage', 'pr_commute', 'pr_other', 'pr_yearly_raise',
+                 'pr_children', 'pr_housing', 'pr_groceries', 'pr_rotation')
     def _pr_sum(self):
         '''
         Calculates sum of all payroll items
@@ -108,6 +111,7 @@ class SdHrContractContract(models.Model):
                               rec.pr_children  +
                               rec.pr_housing  +
                               rec.pr_groceries +
+                              rec.pr_yearly_raise +
                               rec.pr_bonus)
             elif rec.contract_type_id_payment == 'rotational':
                 rec.pr_sum = (rec.pr_base +
@@ -120,6 +124,7 @@ class SdHrContractContract(models.Model):
                               rec.pr_friday_work +
                               rec.pr_over_time +
                               rec.pr_shift_work +
+                              rec.pr_yearly_raise +
                               rec.pr_environment_bonus +
                               rec.pr_onshore_rig_bonus +
                               rec.pr_rotation)
