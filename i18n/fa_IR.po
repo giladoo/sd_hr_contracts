@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-23 05:19+0000\n"
-"PO-Revision-Date: 2025-04-23 08:56+0330\n"
+"PO-Revision-Date: 2025-04-23 09:47+0330\n"
 "Last-Translator: Arash Homayounfar <homayounfar@msn.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -269,7 +269,7 @@ msgstr "حق تاهل"
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_onshore_rig_bonus
 msgid "Pr Onshore Rig Bonus"
-msgstr "حق ریگ حفاری"
+msgstr "حق سکوی حفاری"
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_other
@@ -348,5 +348,3 @@ msgstr "کار آموز"
 #, python-format
 msgid "documents"
 msgstr "مستندات"
-
-
