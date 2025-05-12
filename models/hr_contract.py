@@ -16,6 +16,8 @@ import os
 from tempfile import NamedTemporaryFile
 from odoo.tools import html_escape
 from bs4 import BeautifulSoup
+import zipfile
+import io
 
 
 J_DATE_FORMAT = "%Y/%m/%d"
@@ -199,9 +201,15 @@ class SdHrContractContract(models.Model):
 
 
             # # Save the modified .docx file to memory
-            # docx_stream = BytesIO()
-            # template.save(docx_stream)
-            # docx_stream.seek(0)
+            docx_stream = BytesIO()
+            template.save(docx_stream)
+            docx_stream.seek(0)
+
+
+        return  docx_stream.getvalue()
+
+
+
             #
             # # Convert the .docx file to PDF using pypandoc
             # pdf_output = BytesIO()
@@ -239,54 +247,82 @@ class SdHrContractContract(models.Model):
             #     os.remove(tmp_docx_path)
             #     os.remove(tmp_pdf_path)
 
+
             # Step 2: Generate PDF using Odoo's report generation
-            html_content += "</body></html>"
-            pdf_content = self.env['ir.actions.report']._run_wkhtmltopdf([html_content])
-            record.output_pdf = base64.b64encode(pdf_content).decode("UTF-8")
+            # html_content += "</body></html>"
+            # pdf_content = self.env['ir.actions.report']._run_wkhtmltopdf([html_content])
+            # record.output_pdf = base64.b64encode(pdf_content).decode("UTF-8")
 
     def generate_and_download_docx(self):
-        self.regenerate_template()
-
-#         download_url = f'/web/hrcontracts/download/?id={self.id}'
-#         print(f"""
-#         self._name: {self._name}
-#         self._origin.id: {self._origin.id}
-#     download_url: {download_url}
-# """)
+        active_ids = self.env.context.get('active_ids', False)
+        records = self.browse(active_ids)
+        print(f"\n records:\n {records} {self}")
         attachment_model = self.env['ir.attachment']
-        attach_id = attachment_model.search([('res_model', '=', self._name),
-                                             ('res_id', '=', self.id),
-                                             ('res_field', '=', 'output_file'),
-                                             ])
-        logging.warning(f">>>>>>>>>  attach_id {attach_id}")
-        if  len(attach_id) > 1:
-            for rec in attach_id:
-                rec.unlink()
-            attach_id = False
+        if len(records) > 1:
+            zip_buffer = io.BytesIO()
+            with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                for rec in records:
+                    doc_content = rec.regenerate_template()  # Your function to create `.docx` content
+                    print(doc_content)
+                    zip_file.writestr(f"{rec.employee_id.name}.docx", doc_content)
 
-        if attach_id:
-            attach_id.write({
-                'datas': self.output_file,
-                'name': self.output_file_name,
+            zip_buffer.seek(0)
+            zip_buffer = base64.b64encode(zip_buffer.getvalue()).decode('utf-8')
 
-            })
-            logging.warning(f">>>>>>>>> is attach_id")
-        else:
-            logging.warning(f">>>>>>>>> is NOT attach_id")
+            # zip_buffer
+            # print(zip_buffer)
             attach_id = attachment_model.create({
                 'res_model': self._name,
                 'res_field': 'output_file',
-                'res_id': self.id,
-                'datas': self.output_file,
-                'name': self.output_file_name,
+                'res_id': rec.id,
+                'datas': zip_buffer,
+                'name': 'self.output_file_name',
                 'type': 'binary',
             })
+            download_url = '/web/content/%s' % attach_id.id
+            return { 'type': 'ir.actions.act_url',
+                     'url': download_url,
+                     'target': 'self',
+                     }
+        else:
+            record = records if len(records) == 1 else self
+            doc_content = record.regenerate_template()  # Your function to create `.docx` content
 
-        download_url = '/web/content/%s' % attach_id.id
-        return { 'type': 'ir.actions.act_url',
-                 'url': download_url,
-                 'target': 'self',
-                 }
+            attach_id = attachment_model.search([('res_model', '=', self._name),
+                                                 ('res_id', '=', record.id),
+                                                 ('res_field', '=', 'output_file'),
+                                                 ])
+            logging.warning(f">>>>>>>>>  attach_id {attach_id}")
+            # return
+            if  len(attach_id) > 1:
+                for att in attach_id:
+                    att.unlink()
+                attach_id = False
+
+            if attach_id:
+                attach_id.write({
+                    'datas': record.output_file,
+                    'name': record.output_file_name,
+
+                })
+                logging.warning(f">>>>>>>>> is attach_id")
+            else:
+                logging.warning(f">>>>>>>>> is NOT attach_id")
+                attach_id = attachment_model.create({
+                    'res_model': self._name,
+                    'res_field': record.output_file,
+                    'res_id': record.id,
+                    'datas': record.output_file,
+                    'name': record.output_file_name,
+                    'type': 'binary',
+                })
+
+
+            download_url = '/web/content/%s' % attach_id.id
+            return { 'type': 'ir.actions.act_url',
+                     'url': download_url,
+                     'target': 'self',
+                     }
 
 
 
@@ -391,7 +427,7 @@ class SdHrContractContract(models.Model):
                 paragraph.add_run(parts[1])
 
     def write(self, vals):
-        print(f"\n  >>>   vals: {vals} \n >>>  res: \n")
+        # print(f"\n  >>>   vals: {vals} \n >>>  res: \n")
         if vals.get('contract_type_id', False):
             raise ValidationError(_("Contract Type cannot be updated as contract number is based on it."))
         return super().write(vals)
@@ -400,7 +436,7 @@ class SdHrContractContract(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            print(f"\n >>>>> vals: {vals}\n")
+            # print(f"\n >>>>> vals: {vals}\n")
             if not vals.get('name') or vals['name'] == _('New'):
                 if not vals.get('contract_type_id'):
                     raise ValidationError(_("Please select a 'Contract Type'"))

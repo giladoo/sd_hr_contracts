@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="hr_contract_view_list_inherit_sd_hr_contracts" model="ir.ui.view">
+        <field name="name">hr_contract.hr_contract_view_list.view.list.inherit.sd_hr_contracts</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <header>
+<!--                    <button class="btn btn-outline-primary" name="generate_and_download_docx"-->
+<!--                            type="object" icon="fa-file-word-o">-->
+<!--                        Download .docx-->
+<!--                    </button>-->
+                    <button string="Download .doc" class="btn btn-outline-primary" name="generate_and_download_docx"
+                            type="object"  icon="fa-file-word-o"></button>
+
+                </header>
+            </xpath>
+
+        </field>
+    </record>
+
     <record id="hr_contract_view_form_inherit_sd_hr_contracts" model="ir.ui.view">
         <field name="name">hr_contract.hr_contract_view_form.view.form.inherit.sd_hr_contracts</field>
         <field name="model">hr.contract</field>
