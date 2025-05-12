@@ -29,7 +29,7 @@ IRANSansFaNum = 'IRANSansFaNum'
 class SdHrContractContract(models.Model):
     _inherit = 'hr.contract'
 
-    name = fields.Char('Reference', copy=False, readonly=True, default=lambda x: _('New'))
+    name = fields.Char('Reference', copy=False, readonly=False, default=lambda x: _('New'))
     doc_template = fields.Many2one('hr.contract.doc_template', )
     output_file = fields.Binary(string="Generated File", readonly=False, copy=False,)
     output_file_name = fields.Char(copy=False, )
