@@ -58,6 +58,7 @@ class SdHrContractContract(models.Model):
     pr_housing = fields.Integer()
     pr_groceries = fields.Integer()
     pr_rotation = fields.Integer()
+    pr_yearly = fields.Integer()
     pr_sum = fields.Integer(compute='_pr_sum', store=True)
 
     '''
@@ -82,7 +83,7 @@ class SdHrContractContract(models.Model):
             rec.doc_template = rec.doc_template.search([('contract_type', '=', rec.contract_type_id.id)], limit=1).id or False
 
 
-    @api.depends('contract_type_id','pr_base', 'pr_absorbent', 'pr_job', 'pr_marriage', 'pr_commute', 'pr_other', 'pr_children', 'pr_housing', 'pr_groceries', 'pr_rotation')
+    @api.depends('contract_type_id','pr_base', 'pr_absorbent', 'pr_job', 'pr_marriage', 'pr_commute', 'pr_other', 'pr_children', 'pr_housing', 'pr_groceries', 'pr_rotation', 'pr_yearly')
     def _pr_sum(self):
         '''
         Calculates sum of all payroll items
@@ -90,9 +91,9 @@ class SdHrContractContract(models.Model):
         '''
         for rec in self:
             if rec.contract_type_id_payment == 'monthly':
-                rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries
+                rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries + rec.pr_yearly
             elif rec.contract_type_id_payment == 'rotational':
-                rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries  + rec.pr_rotation
+                rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries  + rec.pr_rotation + rec.pr_yearly
             elif rec.contract_type_id_payment == 'retired':
                 rec.pr_sum = rec.pr_base
             else:
