@@ -273,11 +273,12 @@ class SdHrContractContract(models.Model):
         attachment_model = self.env['ir.attachment']
         if len(records) > 1:
             zip_buffer = io.BytesIO()
+
             with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
                 for rec in records:
                     doc_content = rec.regenerate_template()  # Your function to create `.docx` content
                     # print(doc_content)
-                    zip_file.writestr(f"{(rec.name).replace('/', '-')} [{rec.employee_id.barcode}] [{rec.employee_id.name}].docx", doc_content)
+                    zip_file.writestr(f"{rec.employee_id.project_name.name}/{(rec.name).replace('/', '-')} [{rec.employee_id.barcode}] [{rec.employee_id.name}].docx", doc_content)
                     # TODO: if name contains "/", it creates a folder based of str befor it
                     # zip_file.writestr(f"[{rec.name}][{rec.employee_id.name}].docx", doc_content)
 
@@ -291,7 +292,7 @@ class SdHrContractContract(models.Model):
                 'res_field': 'output_file',
                 'res_id': rec.id,
                 'datas': zip_buffer,
-                'name': 'self.output_file_name',
+                'name': f"Contracts-{jdatejs()}",
                 'type': 'binary',
             })
             download_url = '/web/content/%s' % attach_id.id
@@ -328,7 +329,7 @@ class SdHrContractContract(models.Model):
                     'res_field': record.output_file,
                     'res_id': record.id,
                     'datas': record.output_file,
-                    'name': record.output_file_name,
+                    'name': f"{(record.name).replace('/', '-')} [{record.employee_id.barcode}] [{record.employee_id.name}].docx",
                     'type': 'binary',
                 })
 
