@@ -20,8 +20,9 @@ import zipfile
 import io
 from num2words import num2words
 from num2fawords import words, ordinal_words
-
+import pypandoc
 import traceback
+from docx2pdf import convert
 
 J_DATE_FORMAT = "%Y/%m/%d"
 B_NAZANIN = 'B Nazanin'
@@ -140,7 +141,7 @@ class SdHrContractContract(models.Model):
                     for variable, new_value in variables_dict.items():
                         if variable in run.text:
                             self.replace_run(record, paragraph, run, variable, value_function_list, numeral_variables,
-                                        html_variables, new_value)
+                                             html_variables, new_value)
 
             for table in template.tables:
                 for row in table.rows:
@@ -209,53 +210,58 @@ class SdHrContractContract(models.Model):
             template.save(docx_stream)
             docx_stream.seek(0)
 
+        # # Convert the .docx file to PDF using pypandoc
+        # pdf_output = BytesIO()
+        # pdf_output.write(pypandoc.convert_file(docx_stream, 'pdf', format='docx'))
+        # pdf_output.seek(0)
+        #
+        # # Save the generated PDF into a binary field
+        # record.output_pdf = base64.b64encode(pdf_output.getvalue())
+        # pdf_output.close()
+        # record.output_pdf_name = 'pdf'
+
+        # # Save the modified .docx file to a temporary file
+        # with NamedTemporaryFile(suffix='.docx', delete=False) as tmp_docx:
+        #     template.save(tmp_docx.name)
+        #     tmp_docx_path = tmp_docx.name
+        #
+        # # Convert the .docx file to PDF using pypandoc
+        # try:
+        #     # Specify the output PDF file path
+        #     with NamedTemporaryFile(suffix='.pdf', delete=False) as tmp_pdf:
+        #         tmp_pdf_path = tmp_pdf.name
+        #
+        #     pypandoc.convert_file(tmp_docx_path, 'pdf', format='docx', outputfile=tmp_pdf_path)
+        #
+        #     # Read the generated PDF and save it to the binary field
+        #     with open(tmp_pdf_path, 'rb') as pdf_file:
+        #         record.output_file = base64.b64encode(pdf_file.read())
+        #
+        # except Exception as e:
+        #     raise RuntimeError(f"Error during PDF conversion: {e}")
+        # finally:
+        #     # Clean up temporary files
+        #     os.remove(tmp_docx_path)
+        #     os.remove(tmp_pdf_path)
+
+        # record.output_file = convert(docx_stream.getvalue())
 
         return  docx_stream.getvalue()
 
 
 
-            #
-            # # Convert the .docx file to PDF using pypandoc
-            # pdf_output = BytesIO()
-            # pdf_output.write(pypandoc.convert_file(docx_stream, 'pdf', format='docx'))
-            # pdf_output.seek(0)
-            #
-            # # Save the generated PDF into a binary field
-            # record.output_pdf = base64.b64encode(pdf_output.getvalue())
-            # pdf_output.close()
+        #
 
 
 
 
-            # # Save the modified .docx file to a temporary file
-            # with NamedTemporaryFile(suffix='.docx', delete=False) as tmp_docx:
-            #     template.save(tmp_docx.name)
-            #     tmp_docx_path = tmp_docx.name
-            #
-            # # Convert the .docx file to PDF using pypandoc
-            # try:
-            #     # Specify the output PDF file path
-            #     with NamedTemporaryFile(suffix='.pdf', delete=False) as tmp_pdf:
-            #         tmp_pdf_path = tmp_pdf.name
-            #
-            #     pypandoc.convert_file(tmp_docx_path, 'pdf', format='docx', outputfile=tmp_pdf_path)
-            #
-            #     # Read the generated PDF and save it to the binary field
-            #     with open(tmp_pdf_path, 'rb') as pdf_file:
-            #         record.output_file = base64.b64encode(pdf_file.read())
-            #
-            # except Exception as e:
-            #     raise RuntimeError(f"Error during PDF conversion: {e}")
-            # finally:
-            #     # Clean up temporary files
-            #     os.remove(tmp_docx_path)
-            #     os.remove(tmp_pdf_path)
 
 
-            # Step 2: Generate PDF using Odoo's report generation
-            # html_content += "</body></html>"
-            # pdf_content = self.env['ir.actions.report']._run_wkhtmltopdf([html_content])
-            # record.output_pdf = base64.b64encode(pdf_content).decode("UTF-8")
+
+        # Step 2: Generate PDF using Odoo's report generation
+        # html_content += "</body></html>"
+        # pdf_content = self.env['ir.actions.report']._run_wkhtmltopdf([html_content])
+        # record.output_pdf = base64.b64encode(pdf_content).decode("UTF-8")
 
     def generate_and_download_docx(self):
         if self.env.context.get('active_model', False) == 'hr.contract':
