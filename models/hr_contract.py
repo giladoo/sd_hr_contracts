@@ -22,7 +22,7 @@ from num2words import num2words
 from num2fawords import words, ordinal_words
 import pypandoc
 import traceback
-from docx2pdf import convert
+# from docx2pdf import convert
 
 J_DATE_FORMAT = "%Y/%m/%d"
 B_NAZANIN = 'B Nazanin'
@@ -277,7 +277,9 @@ class SdHrContractContract(models.Model):
                 for rec in records:
                     doc_content = rec.regenerate_template()  # Your function to create `.docx` content
                     # print(doc_content)
-                    zip_file.writestr(f"{rec.employee_id.name}.docx", doc_content)
+                    zip_file.writestr(f"{(rec.name).replace('/', '-')} [{rec.employee_id.name}].docx", doc_content)
+                    # TODO: if name contains "/", it creates a folder based of str befor it
+                    # zip_file.writestr(f"[{rec.name}][{rec.employee_id.name}].docx", doc_content)
 
             zip_buffer.seek(0)
             zip_buffer = base64.b64encode(zip_buffer.getvalue()).decode('utf-8')
