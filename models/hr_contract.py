@@ -318,7 +318,7 @@ class SdHrContractContract(models.Model):
             if attach_id:
                 attach_id.write({
                     'datas': record.output_file,
-                    'name': record.output_file_name,
+                    'name': f"{(record.name).replace('/', '-')} [{record.employee_id.barcode}] [{record.employee_id.name}].docx",
 
                 })
                 logging.warning(f">>>>>>>>> is attach_id")
