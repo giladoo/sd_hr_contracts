@@ -18,7 +18,10 @@ from odoo.tools import html_escape
 from bs4 import BeautifulSoup
 import zipfile
 import io
+from num2words import num2words
+from num2fawords import words, ordinal_words
 
+import traceback
 
 J_DATE_FORMAT = "%Y/%m/%d"
 B_NAZANIN = 'B Nazanin'
@@ -348,6 +351,7 @@ class SdHrContractContract(models.Model):
             else:
                 run.font.name = B_NAZANIN
         except Exception as e:
+            traceback.print_exc()
             logging.error(f"replace_run > {variable} > {e} ")
 
     def add_html_to_paragraph(self, paragraph, html):
