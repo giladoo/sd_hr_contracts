@@ -258,16 +258,19 @@ class SdHrContractContract(models.Model):
             # record.output_pdf = base64.b64encode(pdf_content).decode("UTF-8")
 
     def generate_and_download_docx(self):
-        active_ids = self.env.context.get('active_ids', False)
-        records = self.browse(active_ids)
-        print(f"\n records:\n {records} {self}")
+        if self.env.context.get('active_model', False) == 'hr.contract':
+            records = self.browse(self.env.context.get('active_ids', False))
+        else:
+            records = []
+
+        # print(f"\n records:\n {self.env.context}\n {records} {self}")
         attachment_model = self.env['ir.attachment']
         if len(records) > 1:
             zip_buffer = io.BytesIO()
             with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
                 for rec in records:
                     doc_content = rec.regenerate_template()  # Your function to create `.docx` content
-                    print(doc_content)
+                    # print(doc_content)
                     zip_file.writestr(f"{rec.employee_id.name}.docx", doc_content)
 
             zip_buffer.seek(0)
