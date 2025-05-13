@@ -277,7 +277,7 @@ class SdHrContractContract(models.Model):
                 for rec in records:
                     doc_content = rec.regenerate_template()  # Your function to create `.docx` content
                     # print(doc_content)
-                    zip_file.writestr(f"{(rec.name).replace('/', '-')} [{rec.employee_id.name}].docx", doc_content)
+                    zip_file.writestr(f"{(rec.name).replace('/', '-')} [{rec.employee_id.barcode}] [{rec.employee_id.name}].docx", doc_content)
                     # TODO: if name contains "/", it creates a folder based of str befor it
                     # zip_file.writestr(f"[{rec.name}][{rec.employee_id.name}].docx", doc_content)
 
