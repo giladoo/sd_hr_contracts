@@ -55,6 +55,8 @@ class SdHrContractContract(models.Model):
     pr_base = fields.Integer()
     pr_absorbent = fields.Integer()
     pr_job = fields.Integer()
+    pr_job_position = fields.Integer()
+    pr_leadership = fields.Integer()
     pr_marriage = fields.Integer()
     pr_commute = fields.Integer()
     pr_other = fields.Integer()
@@ -87,7 +89,9 @@ class SdHrContractContract(models.Model):
             rec.doc_template = rec.doc_template.search([('contract_type', '=', rec.contract_type_id.id)], limit=1).id or False
 
 
-    @api.depends('contract_type_id','pr_base', 'pr_absorbent', 'pr_job', 'pr_marriage', 'pr_commute', 'pr_other', 'pr_children', 'pr_housing', 'pr_groceries', 'pr_rotation', 'pr_yearly')
+    @api.depends('contract_type_id','pr_base', 'pr_absorbent', 'pr_job',
+                 'pr_marriage', 'pr_commute', 'pr_other', 'pr_children', 'pr_housing',
+                 'pr_groceries', 'pr_rotation', 'pr_yearly', 'pr_job_position', 'pr_leadership', )
     def _pr_sum(self):
         '''
         Calculates sum of all payroll items
@@ -95,9 +99,15 @@ class SdHrContractContract(models.Model):
         '''
         for rec in self:
             if rec.contract_type_id_payment == 'monthly':
-                rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries + rec.pr_yearly
+                rec.pr_sum = (rec.pr_base + rec.pr_absorbent  + rec.pr_job  +
+                              rec.pr_marriage  + rec.pr_commute  + rec.pr_other  +
+                              rec.pr_children  + rec.pr_housing  + rec.pr_groceries +
+                              rec.pr_yearly + rec.pr_job_position + rec.pr_leadership )
             elif rec.contract_type_id_payment == 'rotational':
-                rec.pr_sum = rec.pr_base + rec.pr_absorbent  + rec.pr_job  + rec.pr_marriage  + rec.pr_commute  + rec.pr_other  + rec.pr_children  + rec.pr_housing  + rec.pr_groceries  + rec.pr_rotation + rec.pr_yearly
+                rec.pr_sum = (rec.pr_base + rec.pr_absorbent  + rec.pr_job  +
+                              rec.pr_marriage  + rec.pr_commute  + rec.pr_other  +
+                              rec.pr_children  + rec.pr_housing  + rec.pr_groceries  +
+                              rec.pr_rotation + rec.pr_yearly)
             elif rec.contract_type_id_payment == 'retired':
                 rec.pr_sum = rec.pr_base
             else:

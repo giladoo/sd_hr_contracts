@@ -95,6 +95,8 @@
                         <field name="pr_absorbent" invisible="contract_type_id_payment == 'retired'"/>
                         <field name="pr_yearly" invisible="contract_type_id_payment == 'retired'"/>
                         <field name="pr_job" invisible="contract_type_id_payment == 'retired'"/>
+                        <field name="pr_job_position" invisible="contract_type_id_payment == 'retired'"/>
+                        <field name="pr_leadership" invisible="contract_type_id_payment == 'retired'"/>
                         <field name="pr_marriage" invisible="contract_type_id_payment == 'retired'"/>
                         <field name="pr_commute" invisible="contract_type_id_payment == 'retired'"/>
                         <field name="pr_other" invisible="contract_type_id_payment == 'retired'"/>
