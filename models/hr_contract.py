@@ -4,6 +4,8 @@ from odoo.exceptions import ValidationError
 import logging
 # import pypandoc
 import datetime
+import pytz
+
 import jdatetime
 from jdatetimext import j_start, j_start_end_js, jdatejs
 from docx import Document
@@ -17,6 +19,9 @@ from tempfile import NamedTemporaryFile
 from odoo.tools import html_escape
 from bs4 import BeautifulSoup
 from icecream import ic
+import zipfile
+import io
+
 
 J_DATE_FORMAT = "%Y/%m/%d"
 B_NAZANIN = 'B Nazanin'
@@ -229,7 +234,11 @@ class SdHrContractContract(models.Model):
             record.output_pdf_name = f"{record.with_context(lang='en_US').employee_id.name_cv or 'file'}_{record.name}.pdf"
             record.output_file = base64.b64encode(output_stream.getvalue())
             output_stream.close()
-
+            # # Save the modified .docx file to memory
+            docx_stream = BytesIO()
+            template.save(docx_stream)
+            docx_stream.seek(0)
+        return docx_stream.getvalue()
 
 
             # # Save the modified .docx file to memory
@@ -274,11 +283,90 @@ class SdHrContractContract(models.Model):
             #     os.remove(tmp_pdf_path)
 
             # Step 2: Generate PDF using Odoo's report generation
-            html_content += "</body></html>"
-            pdf_content = self.env['ir.actions.report']._run_wkhtmltopdf([html_content])
-            record.output_pdf = base64.b64encode(pdf_content).decode("UTF-8")
+            # html_content += "</body></html>"
+            # pdf_content = self.env['ir.actions.report']._run_wkhtmltopdf([html_content])
+            # record.output_pdf = base64.b64encode(pdf_content).decode("UTF-8")
 
     def generate_and_download_docx(self):
+        if self.env.context.get('active_model', False) == 'hr.contract':
+            records = self.browse(self.env.context.get('active_ids', False))
+        else:
+            records = []
+
+        print(f"\n records:\n {self.env.context}\n {records} {self}")
+        attachment_model = self.env['ir.attachment']
+        if len(records) > 1:
+            zip_buffer = io.BytesIO()
+
+            with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                for rec in records:
+                    doc_content = rec.regenerate_template()  # Your function to create `.docx` content
+                    # print(doc_content)
+                    zip_file.writestr(f"{rec.employee_id.work_location_id.name if rec.employee_id.work_location_id else 'Other'}/{(rec.name).replace('/', '-')} [{rec.employee_id.barcode}] [{rec.employee_id.name}].docx", doc_content)
+                    # TODO: if name contains "/", it creates a folder based of str befor it
+                    # zip_file.writestr(f"[{rec.name}][{rec.employee_id.name}].docx", doc_content)
+
+            zip_buffer.seek(0)
+            zip_buffer = base64.b64encode(zip_buffer.getvalue()).decode('utf-8')
+            today = datetime.datetime.now(pytz.timezone(self.env.context.get('tz', 'GMT')))
+
+            # zip_buffer
+            # print(zip_buffer)
+            attach_id = attachment_model.create({
+                'res_model': self._name,
+                'res_field': 'output_file',
+                'res_id': rec.id,
+                'datas': zip_buffer,
+                'name': f"Contracts_{jdatejs(today, '%Y%m%d')}_{today.strftime('%H%M%S')}",
+                'type': 'binary',
+            })
+            download_url = '/web/content/%s' % attach_id.id
+            return { 'type': 'ir.actions.act_url',
+                     'url': download_url,
+                     'target': 'self',
+                     }
+        else:
+            record = records if len(records) == 1 else self
+            doc_content = record.regenerate_template()  # Your function to create `.docx` content
+
+            attach_id = attachment_model.search([('res_model', '=', self._name),
+                                                 ('res_id', '=', record.id),
+                                                 ('res_field', '=', 'output_file'),
+                                                 ])
+            logging.warning(f">>>>>>>>>  attach_id {attach_id}")
+            # return
+            if  len(attach_id) > 1:
+                for att in attach_id:
+                    att.unlink()
+                attach_id = False
+
+            if attach_id:
+                attach_id.write({
+                    'datas': record.output_file,
+                    'name': f"{(record.name).replace('/', '-')} [{record.employee_id.barcode}] [{record.employee_id.name}].docx",
+
+                })
+                logging.warning(f">>>>>>>>> is attach_id")
+            else:
+                logging.warning(f">>>>>>>>> is NOT attach_id")
+                attach_id = attachment_model.create({
+                    'res_model': self._name,
+                    'res_field': record.output_file,
+                    'res_id': record.id,
+                    'datas': record.output_file,
+                    'name': f"{(record.name).replace('/', '-')} [{record.employee_id.barcode}] [{record.employee_id.name}].docx",
+                    'type': 'binary',
+                })
+
+
+            download_url = '/web/content/%s' % attach_id.id
+            return { 'type': 'ir.actions.act_url',
+                     'url': download_url,
+                     'target': 'self',
+                     }
+
+
+    def generate_and_download_docx_old(self):
         self.regenerate_template()
 
 #         download_url = f'/web/hrcontracts/download/?id={self.id}'
