@@ -4,6 +4,7 @@ from odoo.exceptions import ValidationError
 import logging
 # import pypandoc
 import datetime
+import pytz
 import jdatetime
 from jdatetimext import j_start, j_start_end_js, jdatejs
 from docx import Document
@@ -40,7 +41,7 @@ class SdHrContractContract(models.Model):
     output_pdf_name = fields.Char(copy=False, )
     output_pdf = fields.Binary(string="PDF File", readonly=True, copy=False, )
 
-    subject = fields.Char(requird=True, translate=True)
+    subject = fields.Char(required=False, translate=True)
     issue_date = fields.Date(required=True, copy=False, default=lambda self: fields.date.today())
     project_name = fields.Many2one('sd_projects.projects', default=lambda self: self.employee_id.project_name.id or False)
     # TODO: It must have a default value
@@ -219,6 +220,7 @@ class SdHrContractContract(models.Model):
             docx_stream = BytesIO()
             template.save(docx_stream)
             docx_stream.seek(0)
+        return  docx_stream.getvalue()
 
         # # Convert the .docx file to PDF using pypandoc
         # pdf_output = BytesIO()
@@ -256,7 +258,6 @@ class SdHrContractContract(models.Model):
 
         # record.output_file = convert(docx_stream.getvalue())
 
-        return  docx_stream.getvalue()
 
 
 
