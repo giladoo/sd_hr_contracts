@@ -17,6 +17,7 @@
         # 'views/views.xml',
         'views/hr_employee_views.xml',
         'views/hr_contract_doc_template_views.xml',
+        'views/hr_contract_payment.xml',
         'views/hr_contract_views.xml',
         'data/hr_contract_sequence.xml',
     ],

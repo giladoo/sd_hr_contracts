@@ -92,6 +92,12 @@
                 </group>
                 <group invisible="contract_type_id_payment not in ['monthly', 'rotational', 'retired']">
                     <group>
+<!--                        <field name="sd_payment">-->
+<!--                            <list editable="bottom">-->
+<!--                                <field name="payment_type"/>-->
+<!--                                <field name="amount"/>-->
+<!--                            </list>-->
+<!--                        </field>-->
                         <separator  string="Payroll"  class="ps-2 text-bg-secondary"/>
                         <field name="pr_sum" class="ps-2 text-bg-700"/>
                         <field name="pr_base"/>
@@ -106,6 +112,8 @@
                         <field name="pr_children" invisible="contract_type_id_payment == 'retired'"/>
                         <field name="pr_housing" invisible="contract_type_id_payment == 'retired'"/>
                         <field name="pr_groceries" invisible="contract_type_id_payment == 'retired'"/>
+                        <field name="pr_eid" invisible="contract_type_id_payment == 'retired'"/>
+                        <field name="pr_years" invisible="contract_type_id_payment == 'retired'"/>
                         <field name="pr_rotation" invisible="contract_type_id_payment in ['retired', 'monthly']"/>
                     </group>
                 </group>

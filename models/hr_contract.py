@@ -47,6 +47,7 @@ class SdHrContractContract(models.Model):
     # TODO: It must have a default value
     representative = fields.Many2one('hr.employee', )
     contract_type_id_payment = fields.Selection(related='contract_type_id.payment')
+    sd_payment = fields.One2many('sd_hr_contracts.payment', 'contract_id', tracking=True)
     # PartTime Contract
     hourly_rate = fields.Integer()
     hourly_rate_text = fields.Char()
@@ -66,6 +67,8 @@ class SdHrContractContract(models.Model):
     pr_groceries = fields.Integer()
     pr_rotation = fields.Integer()
     pr_yearly = fields.Integer()
+    pr_eid = fields.Integer()
+    pr_years = fields.Integer()
     pr_sum = fields.Integer(compute='_pr_sum', store=True)
 
     '''
@@ -92,7 +95,8 @@ class SdHrContractContract(models.Model):
 
     @api.depends('contract_type_id','pr_base', 'pr_absorbent', 'pr_job',
                  'pr_marriage', 'pr_commute', 'pr_other', 'pr_children', 'pr_housing',
-                 'pr_groceries', 'pr_rotation', 'pr_yearly', 'pr_job_position', 'pr_leadership', )
+                 'pr_groceries', 'pr_rotation', 'pr_yearly', 'pr_job_position', 'pr_leadership',
+                 'pr_years', 'pr_eid', )
     def _pr_sum(self):
         '''
         Calculates sum of all payroll items
@@ -103,7 +107,9 @@ class SdHrContractContract(models.Model):
                 rec.pr_sum = (rec.pr_base + rec.pr_absorbent  + rec.pr_job  +
                               rec.pr_marriage  + rec.pr_commute  + rec.pr_other  +
                               rec.pr_children  + rec.pr_housing  + rec.pr_groceries +
-                              rec.pr_yearly + rec.pr_job_position + rec.pr_leadership )
+                              rec.pr_yearly + rec.pr_job_position + rec.pr_leadership +
+                              rec.pr_years + rec.pr_eid
+                              )
             elif rec.contract_type_id_payment == 'rotational':
                 rec.pr_sum = (rec.pr_base + rec.pr_absorbent  + rec.pr_job  +
                               rec.pr_marriage  + rec.pr_commute  + rec.pr_other  +

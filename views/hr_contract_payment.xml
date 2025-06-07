@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="payment_list" model="ir.ui.view">
+        <field name="name">Payment List</field>
+        <field name="model">sd_hr_contracts.payment</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="contract_id"/>
+                <field name="payment_type"/>
+                <field name="amount"/>
+            </list>
+
+        </field>
+    </record>
+
+    <record id="payment_type_list" model="ir.ui.view">
+        <field name="name">Payment Type List</field>
+        <field name="model">sd_hr_contracts.payment_type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+            </list>
+
+        </field>
+    </record>
+
+
+    <record id="payment_action"  model="ir.actions.act_window">
+        <field name="name">Payment</field>
+        <field name="res_model">sd_hr_contracts.payment</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="payment_type_action"  model="ir.actions.act_window">
+        <field name="name">Payment Type</field>
+        <field name="res_model">sd_hr_contracts.payment_type</field>
+        <field name="view_mode">list</field>
+    </record>
+
+
+<menuitem
+        id="payment_menu"
+        name="Payment"
+        action="payment_action"
+        parent="hr.menu_config_employee"
+        sequence="20"
+        groups="hr_contract.group_hr_contract_manager"/>
+
+<menuitem
+        id="payment_type_menu"
+        name="Payment Type"
+        action="payment_type_action"
+        parent="hr.menu_config_employee"
+        sequence="20"
+        groups="hr_contract.group_hr_contract_manager"/>
+
+
+
+</odoo>
