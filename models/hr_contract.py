@@ -41,7 +41,7 @@ class SdHrContractContract(models.Model):
     output_pdf = fields.Binary(string="PDF File", readonly=True, copy=False, )
 
     subject = fields.Char(requird=True, translate=True)
-    issue_date = fields.Date(required=True, copy=False, default=lambda self: fields.date.today())
+    issue_date = fields.Date(required=False, copy=False, default=lambda self: fields.date.today())
     project_name = fields.Many2one('sd_projects.projects', default=lambda self: self.employee_id.project_name.id or False)
     # TODO: It must have a default value
     representative = fields.Many2one('hr.employee', )
@@ -547,8 +547,14 @@ class SdHrContractContractDocTemplate(models.Model):
     name = fields.Char(required=True)
     contract_type = fields.Many2one('hr.contract.type')
     template_file = fields.Binary(string="Template File", required=True, attachment=True)
+    variable_no = fields.Char(default=lambda self: _('New'))
 
-
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if not vals.get('variable_no') or vals['variable_no'] == _('New'):
+                vals['variable_no'] = self.env['ir.sequence'].next_by_code('sd_hr.variables') or _('New')
+        return super().create(vals_list)
 
 
 class SdHrContractContractType(models.Model):

@@ -67,7 +67,7 @@
             <xpath expr="//field[@name='date_start']" position="before">
                 <field name="representative"/>
                 <field name="manager"/>
-                <field name="issue_date"/>
+<!--                <field name="issue_date"/>-->
             </xpath>
             <xpath expr="//field[@name='department_id']" position="after">
                 <field name="project_name"/>
