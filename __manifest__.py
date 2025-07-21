@@ -20,6 +20,7 @@
         'views/hr_contract_payment.xml',
         'views/hr_contract_views.xml',
         'data/hr_contract_sequence.xml',
+        'wizard/contract_duplicate.xml',
     ],
 'assets': {
         'web.assets_backend':[

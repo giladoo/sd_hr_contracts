@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="contract_duplicate_wizard" model="ir.ui.view">
+        <field name="name">HR Contract Duplicate</field>
+        <field name="model">sd_hr_contracts.duplicate</field>
+        <field name="arch" type="xml">
+            <form create="0">
+                <group>
+                    <group>
+                        <field name="representative"/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                    </group>
+                </group>
+                <footer>
+                    <button special="cancel" data-hotkey="x" string="Close" class="btn-primary"/>
+                    <button name="duplicate_selected_contract" string="Duplicate" type="object" class="btn-secondary" data-hotkey="q"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+<!--                <div class="oe_button_box" name="button_box" >-->
+
+<!--                    <button class="oe_stat_button" name="employee_action_view"-->
+<!--                                type="object" icon="fa-user">-->
+<!--&lt;!&ndash;                            <field string="Employee docs" name="employee_document_count" widget="statinfo"/>&ndash;&gt;-->
+<!--                    </button>-->
+
+<!--                        <button class="oe_stat_button" name="%(hr.open_view_employee_list_my)d" context="{'active_id': employee_id.id}"-->
+<!--                                    type="action" icon="fa-users">-->
+<!--    &lt;!&ndash;                            <field string="Employee docs" name="employee_document_count" widget="statinfo"/>&ndash;&gt;-->
+<!--                        </button>-->
+
+<!--                </div>-->
+
+
+
+<!--                <div class="row mx-0 p2">-->
+<!--                    <div class="col-2 p-2">-->
+<!--                        <field name="employee_id"/>-->
+<!--                        <div class="text-center">-->
+<!--                            <field name="image_1920" widget="image" options="{'size': [90, 90]}"/>-->
+
+<!--                        </div>-->
+<!--                        <group styel="border-width: 0px !important">-->
+
+<!--                            <field name="employee_name"/>-->
+<!--                            <field name="job_title"/>-->
+<!--                            <field name="department" options="{'no_open': True}" />-->
+<!--                            <field name="identification_id"/>-->
+<!--                            <field name="gender"/>-->
+<!--                            <field name="birthday"/>-->
+<!--                                        <field name="documents_count" />-->
+
+<!--                        </group>-->
+<!--                    </div>-->
+<!--                    <div class="col-10 p-2">-->
+<!--                        <notebook>-->
+<!--                            <page string="General Information">-->
+<!--                                <group>-->
+<!--                                    <group>-->
+
+<!--                                    </group>-->
+<!--                                </group>-->
+<!--                                    <field name="helper_field" />-->
+
+<!--                            </page>-->
+<!--                            <page string="Relatives">-->
+<!--                                <field name="relatives" context="{'default_employee_id': employee_id}"-->
+<!--                                   options="{'unlink': False, }">-->
+<!--                                <list>-->
+<!--                                    <field name="employee_id" column_invisible="1"/>-->
+<!--                                    <field name="name"/>-->
+<!--&lt;!&ndash;                                    <field name="relative_type"/>&ndash;&gt;-->
+<!--                                </list>-->
+<!--                            </field>-->
+<!--                            </page>-->
+<!--                            <page string="Documents">-->
+<!--                                <field name="documents" widget="one2many" mode="list" options="{'unlink': False}"-->
+<!--                                   context="{'default_employee_id': employee_id}">-->
+<!--                                <list>-->
+<!--                                    <field name="name"/>-->
+<!--&lt;!&ndash;                                    <field name="relative_id"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <field name="document_type"/>&ndash;&gt;-->
+<!--                                    <field name="state" widget="badge"-->
+<!--                                           decoration-info="state == 'draft'"-->
+<!--                                           decoration-warning="state == 'expiring'"-->
+<!--                                           decoration-danger="state == 'expired'"/>-->
+<!--                                </list>-->
+
+<!--                            </field>-->
+<!--                            </page>-->
+<!--                        </notebook>-->
+<!--                    </div>-->
+
+
+
+<!--                </div>-->
+
+<!--            </form>-->
+
+<!--        </field>-->
+<!--    </record>-->
+
+    <record id="duplicate_action" model="ir.actions.act_window">
+        <field name="name">HR contract duplicate</field>
+        <field name="res_model">sd_hr_contracts.duplicate</field>
+        <field name="view_mode">form</field>
+
+    </record>
+
+</odoo>

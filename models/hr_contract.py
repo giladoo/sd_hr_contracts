@@ -87,6 +87,25 @@ class SdHrContractContract(models.Model):
 
     additional_note = fields.Text(copy=False, )
 
+    def duplicate_contract(self):
+        active_ids = self.env.context.get('active_ids', [])
+        print(f"sssssss\n active_ids: {active_ids}")
+        # view_id = self.env.ref('hr.view_employee_form').sudo().read()[0]
+        domain = []
+        context = {}
+        return {
+            'name': _('Contracts'),
+            'domain': domain,
+            'res_model': 'sd_hr_contracts.duplicate',
+            'type': 'ir.actions.act_window',
+            # 'res_id': self.employee_id.id,
+            'view_id': False,
+            'view_mode': 'form',
+            'context': context,
+            'target': 'new',
+        }
+
+
     @api.onchange('contract_type_id')
     def contract_type_changed(self):
         for rec in self:
