@@ -289,7 +289,8 @@ class SdHrContractContract(models.Model):
 
     def generate_and_download_docx(self):
         if self.env.context.get('active_model', False) == 'hr.contract':
-            records = self.browse(self.env.context.get('active_ids', False))
+            # records = self.browse(self.env.context.get('active_ids', False))
+            records = self
         else:
             records = []
 
