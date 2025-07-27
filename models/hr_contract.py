@@ -300,12 +300,22 @@ class SdHrContractContract(models.Model):
         # record.output_pdf = base64.b64encode(pdf_content).decode("UTF-8")
 
     def generate_and_download_docx(self):
+        # print(f"\n records:\n {self.env.context}\n  {self}")
+        # for rec in self:
+        #     print(f''' >>>>>>>>>>>>>>>
+        #         {rec._name}
+        #         {rec.name}
+        #         {rec.id}
+        #         {rec.employee_id.barcode}
+        #         {jdatejs(rec.date_start)}
+        #         {jdatejs(rec.date_end)}
+        #     ''')
+        # Todo: I cannot remember why i added this to check by hr.contract
         if self.env.context.get('active_model', False) == 'hr.contract':
-            records = self.browse(self.env.context.get('active_ids', False))
+            records = self
         else:
             records = []
 
-        # print(f"\n records:\n {self.env.context}\n {records} {self}")
         attachment_model = self.env['ir.attachment']
         if len(records) > 1:
             zip_buffer = io.BytesIO()
@@ -344,7 +354,7 @@ class SdHrContractContract(models.Model):
                                                  ('res_id', '=', record.id),
                                                  ('res_field', '=', 'output_file'),
                                                  ])
-            logging.warning(f">>>>>>>>>  attach_id {attach_id}")
+            logging.warning(f">>>>>>>>> record: {record.name}  attach_id {attach_id}")
             # return
             if  len(attach_id) > 1:
                 for att in attach_id:
