@@ -8,3 +8,9 @@ class SdHrContractsEmployee(models.Model):
 
     first_contract = fields.Date()
 
+
+class SdHrContractsEmployeePublic(models.Model):
+    _inherit = 'hr.employee.public'
+
+    first_contract = fields.Date()
+
