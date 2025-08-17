@@ -2,7 +2,7 @@ from odoo import models, fields, api, _
 import json
 
 from odoo.exceptions import ValidationError
-
+from icecream import ic
 
 class SdHrContractDuplacate(models.TransientModel):
     _name = 'sd_hr_contracts.duplicate'
@@ -12,6 +12,13 @@ class SdHrContractDuplacate(models.TransientModel):
     start_date = fields.Date(required=True)
     end_date = fields.Date(required=True)
     representative = fields.Many2one('hr.employee')
+    contract_type_id = fields.Many2one('hr.contract.type')
+    doc_template = fields.Many2one('hr.contract.doc_template')
+
+    convert_state = fields.Selection([('draft', 'Draft'),
+                                      ('close', 'Close'),
+                                      ('cancel', 'Cancel')],
+                                     default='close', required=True)
 
     def duplicate_selected_contract(self):
         context = self.env.context
@@ -19,11 +26,13 @@ class SdHrContractDuplacate(models.TransientModel):
         contracts = self.env['hr.contract'].browse(active_ids)
         for record in contracts:
             if record.state in ['draft', 'open']:
-                record.write({'state': 'close'})
+                record.write({'state': self.convert_state})
             record.copy({'issue_date': self.start_date,
                          'date_start': self.start_date,
                          'date_end': self.end_date,
                          'representative': self.representative.id if self.representative else False,
+                         'contract_type_id': self.contract_type_id.id if self.contract_type_id else record.contract_type_id.id,
+                         'doc_template': self.doc_template.id if self.contract_type_id and self.doc_template else record.doc_template.id,
                          })
 
         # print(f">>>>>>>>>>>>>\n context:{context} \n start_date: {self.start_date}    end_date: {self.end_date}")

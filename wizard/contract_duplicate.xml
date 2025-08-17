@@ -10,6 +10,12 @@
                         <field name="representative"/>
                         <field name="start_date"/>
                         <field name="end_date"/>
+                        <field name="contract_type_id" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                        <field name="doc_template" domain="[('contract_type', '=', contract_type_id)]" required="contract_type_id != False"
+                               options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                    </group>
+                    <group>
+                        <field name="convert_state"/>
                     </group>
                 </group>
                 <footer>
