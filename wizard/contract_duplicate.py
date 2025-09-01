@@ -6,6 +6,7 @@ from icecream import ic
 
 class SdHrContractDuplacate(models.TransientModel):
     _name = 'sd_hr_contracts.duplicate'
+    _description = "sd_hr_contracts.duplicate"
     # _rec_name = 'employee_id'
 
     name = fields.Char()

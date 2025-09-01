@@ -32,7 +32,7 @@
 
     ],
 	'external_dependencies': {
-    	'python': ['jdatetimext','docx', 'num2words', 'num2fawords']
+    	'python': ['jdatetimext','python-docx', 'num2words', 'num2fawords']
     },
     'license': 'LGPL-3',
 }
