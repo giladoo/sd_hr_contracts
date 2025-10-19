@@ -21,10 +21,6 @@
         </field>
     </record>
 
-
-
-
-
     <record id="hr_contract_view_form_inherit_sd_hr_contracts" model="ir.ui.view">
         <field name="name">hr_contract.hr_contract_view_form.view.form.inherit.sd_hr_contracts</field>
         <field name="model">hr.contract</field>

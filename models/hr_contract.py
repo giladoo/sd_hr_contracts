@@ -548,6 +548,7 @@ class SdHrContractContractDocTemplate(models.Model):
     name = fields.Char(required=True)
     contract_type = fields.Many2one('hr.contract.type')
     template_file = fields.Binary(string="Template File", required=True, attachment=True)
+    filename = fields.Char()
     variable_no = fields.Char(default=lambda self: _('New'))
 
     @api.model_create_multi
