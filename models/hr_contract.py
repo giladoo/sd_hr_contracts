@@ -517,6 +517,7 @@ class SdHrContractContractDocTemplate(models.Model):
 
     name = fields.Char(required=True)
     contract_type = fields.Many2one('hr.contract.type')
+    filename = fields.Char()
     template_file = fields.Binary(string="Template File", required=True, attachment=True)
 
 

@@ -8,7 +8,8 @@
                 <field name="id"/>
                 <field name="name"/>
                 <field name="contract_type"/>
-                <field name="template_file" widget="binary"/>
+                <field name="filename" column_invisible="1"/>
+                <field name="template_file" widget="binary" filename="filename"/>
             </list>
 
         </field>
