@@ -70,6 +70,7 @@
                 <field name="issue_date"/>
             </xpath>
             <xpath expr="//field[@name='department_id']" position="after">
+                <field name="location" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
                 <field name="project_name"/>
             </xpath>
             <xpath expr="//field[@name='resource_calendar_id']" position="after">
@@ -169,4 +170,7 @@
                 </xpath>
             </field>
         </record>
+
+
+
 </odoo>

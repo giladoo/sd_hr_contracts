@@ -52,6 +52,7 @@ class SdHrContractContract(models.Model):
     hourly_rate = fields.Integer()
     hourly_rate_text = fields.Char()
     bond = fields.Integer(default=10)
+    location = fields.Many2one('hr.contract.location')
 
     # FullTime Contract
     pr_base = fields.Integer()
@@ -536,4 +537,9 @@ class SdHrContractContractType(models.Model):
                                default="monthly", required=True)
 
 
+class SdHrContractLocation(models.Model):
+    _name = "hr.contract.location"
+    _description = "Contract Location"
 
+    name = fields.Char(translate=True, required=True)
+    sequence = fields.Integer(default=10)
