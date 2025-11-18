@@ -74,6 +74,7 @@ class SdHrContractContract(models.Model):
 
     pr_sum = fields.Integer(compute='_pr_sum', store=True)
 
+    extra_commute = fields.Integer()
     '''
         pr_base         حقوق پایه 
         فوق العاده جذب    pr_absorbent

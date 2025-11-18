@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-23 05:19+0000\n"
-"PO-Revision-Date: 2025-04-23 09:47+0330\n"
+"POT-Creation-Date: 2025-11-17 17:06+0000\n"
+"PO-Revision-Date: 2025-11-18 08:25+0330\n"
 "Last-Translator: Arash Homayounfar <homayounfar@msn.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -68,7 +68,7 @@ msgstr "نوع قرارداد"
 #: code:addons/sd_hr_contracts/models/hr_contract.py:0
 #, python-format
 msgid "Contract Type cannot be updated as contract number is based on it."
-msgstr ""
+msgstr "نوع قرارداد نمی تواند تغییر کند. شماره قرارداد بر اساس نوع قرارداد ایجاد شده است."
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__create_uid
@@ -78,6 +78,11 @@ msgstr ""
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__create_date
 msgid "Created on"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.hr_contract_view_search_inherit
+msgid "Department"
 msgstr ""
 
 #. module: sd_hr_contracts
@@ -92,6 +97,11 @@ msgid "Doc Template"
 msgstr "الگوها"
 
 #. module: sd_hr_contracts
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.hr_contract_view_list_inherit_sd_hr_contracts
+msgid "Download .doc"
+msgstr ""
+
+#. module: sd_hr_contracts
 #: model_terms:ir.ui.view,arch_db:sd_hr_contracts.hr_contract_view_form_inherit_sd_hr_contracts
 msgid "Download .docx"
 msgstr "دانلود docx"
@@ -102,6 +112,16 @@ msgstr "دانلود docx"
 #, python-format
 msgid "Expire date is not correct."
 msgstr "تاریخ انقضا درست نیست"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__extra_commute
+msgid "Extra Commute"
+msgstr "پرداختی ایاب و ذهاب"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__filename
+msgid "Filename"
+msgstr ""
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__output_file
@@ -302,6 +322,11 @@ msgid "Pr Yearly Raise"
 msgstr "پایه سنوات"
 
 #. module: sd_hr_contracts
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.hr_contract_view_search_inherit
+msgid "Project"
+msgstr ""
+
+#. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__project_name
 msgid "Project Name"
 msgstr "نام پروژه"
@@ -340,6 +365,11 @@ msgstr "فایل الگو"
 #: model:ir.model.fields.selection,name:sd_hr_contracts.selection__hr_contract_type__payment__trainee
 msgid "Trainee"
 msgstr "کار آموز"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__variable_no
+msgid "Variable No"
+msgstr "شماره متغیر"
 
 #. module: sd_hr_contracts
 #. odoo-python
