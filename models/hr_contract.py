@@ -74,6 +74,9 @@ class SdHrContractContract(models.Model):
 
     pr_sum = fields.Integer(compute='_pr_sum', store=True)
 
+    extra_payment = fields.Integer()
+    total_payment = fields.Integer(compute='_pr_sum', store=True)
+
     extra_commute = fields.Integer()
     '''
         pr_base         حقوق پایه 
@@ -100,7 +103,7 @@ class SdHrContractContract(models.Model):
 
     @api.depends('contract_type_id','pr_base',
                  'pr_absorbent', 'pr_job', 'pr_marriage', 'pr_commute', 'pr_other', 'pr_yearly_raise',
-                 'pr_children', 'pr_housing', 'pr_groceries', 'pr_rotation')
+                 'pr_children', 'pr_housing', 'pr_groceries', 'pr_rotation', 'extra_payment')
     def _pr_sum(self):
         '''
         Calculates sum of all payroll items
@@ -139,6 +142,8 @@ class SdHrContractContract(models.Model):
                 rec.pr_sum = rec.pr_base
             else:
                 rec.pr_sum = 0
+
+            rec.total_payment = rec.pr_sum + rec.extra_payment
 
     def get_select(self, rec, field_name):
         field_name = dict(rec._fields[field_name]._description_selection(self.env)).get(rec[field_name])

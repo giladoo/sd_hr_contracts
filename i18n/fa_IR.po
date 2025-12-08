@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-17 17:06+0000\n"
-"PO-Revision-Date: 2025-11-18 08:25+0330\n"
+"POT-Creation-Date: 2025-12-08 11:13+0000\n"
+"PO-Revision-Date: 2025-12-08 14:45+0330\n"
 "Last-Translator: Arash Homayounfar <homayounfar@msn.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -68,7 +68,9 @@ msgstr "نوع قرارداد"
 #: code:addons/sd_hr_contracts/models/hr_contract.py:0
 #, python-format
 msgid "Contract Type cannot be updated as contract number is based on it."
-msgstr "نوع قرارداد نمی تواند تغییر کند. شماره قرارداد بر اساس نوع قرارداد ایجاد شده است."
+msgstr ""
+"نوع قرارداد نمی تواند تغییر کند. شماره قرارداد بر اساس نوع قرارداد ایجاد "
+"شده است."
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__create_uid
@@ -117,6 +119,11 @@ msgstr "تاریخ انقضا درست نیست"
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__extra_commute
 msgid "Extra Commute"
 msgstr "پرداختی ایاب و ذهاب"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__extra_payment
+msgid "Extra Payment"
+msgstr "پرداخت مازاد"
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__filename
@@ -360,6 +367,11 @@ msgstr "موضوع"
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__template_file
 msgid "Template File"
 msgstr "فایل الگو"
+
+#. module: sd_hr_contracts
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__total_payment
+msgid "Total Payment"
+msgstr "جمع پرداختی"
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields.selection,name:sd_hr_contracts.selection__hr_contract_type__payment__trainee

@@ -91,6 +91,8 @@
                 <group invisible="contract_type_id_payment not in ['monthly', 'rotational', 'retired']">
                     <group>
                         <separator  string="Payroll"  class="ps-2 text-bg-secondary"/>
+                        <field name="total_payment" class="ps-2 text-bg-700"/>
+                        <field name="extra_payment" class="ps-2 "/>
                         <field name="pr_sum" class="ps-2 text-bg-700"/>
                         <field name="pr_base"/>
                         <field name="pr_absorbent" invisible="contract_type_id_payment == 'retired'"/>
