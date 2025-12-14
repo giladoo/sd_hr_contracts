@@ -353,7 +353,7 @@ msgstr ""
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_absorbent
 msgid "Pr Absorbent"
-msgstr "حق جذف"
+msgstr "حق جذب"
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_base
