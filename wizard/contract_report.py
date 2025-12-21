@@ -29,7 +29,7 @@ class SdHrContractDuplacate(models.TransientModel):
         NO = _('No')
 
         employees = employee_model.search(emp_domain, order='barcode')
-        contracts = contract_model.search([], order='date_end desc').grouped('employee_id')
+        contracts = contract_model.search([ ('employee_id.active', '!=', False)], order='date_end desc').grouped('employee_id')
 
         employees_dict = dict()
 
