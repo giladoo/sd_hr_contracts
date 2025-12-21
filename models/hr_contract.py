@@ -23,6 +23,8 @@ from num2words import num2words
 from num2fawords import words, ordinal_words
 import pypandoc
 import traceback
+from odoo.osv import expression
+
 # from docx2pdf import convert
 
 J_DATE_FORMAT = "%Y/%m/%d"
@@ -87,6 +89,39 @@ class SdHrContractContract(models.Model):
     '''
 
     additional_note = fields.Text(copy=False, )
+
+    @api.constrains('employee_id', 'state', 'kanban_state', 'date_start', 'date_end')
+    def _check_current_contract(self):
+        # print(f">>>>>>>>>>>>>>>>>>>>\n_check_current_contract()\n>>>>>>>>>>>>>>>>>>>>>>>>>")
+        """ Two contracts in state [incoming | open | close] cannot overlap """
+        for contract in self.filtered(lambda c: (c.state not in ['draft', 'cancel'] or c.state == 'draft' and c.kanban_state == 'done') and c.employee_id):
+            domain = [
+                ('id', '!=', contract.id),
+                ('employee_id', '=', contract.employee_id.id),
+                ('company_id', '=', contract.company_id.id),
+                '|',
+                    ('state', 'in', ['open', 'close']),
+                    '&',
+                        ('state', '=', 'draft'),
+                        ('kanban_state', '=', 'done') # replaces incoming
+            ]
+
+            if not contract.date_end:
+                start_domain = []
+                end_domain = ['|', ('date_end', '>=', contract.date_start), ('date_end', '=', False)]
+            else:
+                start_domain = [('date_start', '<=', contract.date_end)]
+                end_domain = ['|', ('date_end', '>', contract.date_start), ('date_end', '=', False)]
+
+            domain = expression.AND([domain, start_domain, end_domain])
+            # if self.search_count(domain):
+            #     raise ValidationError(
+            #         _(
+            #             'An employee can only have one contract at the same time. (Excluding Draft and Cancelled contracts).\n\nEmployee: %(employee_name)s',
+            #             employee_name=contract.employee_id.name
+            #         )
+            #     )
+
 
     def duplicate_contract(self):
         active_ids = self.env.context.get('active_ids', [])

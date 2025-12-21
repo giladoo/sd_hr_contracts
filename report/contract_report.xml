@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="sd_hr_contracts_report_a4" model="report.paperformat">
+    <field name="name">Contract A4 Landscape</field>
+    <field name="default" eval="True"/>
+    <field name="format">custom</field>
+    <field name="page_height">297</field>
+    <field name="page_width">210</field>
+    <field name="orientation">Portrait</field>
+    <field name="margin_top">37</field>
+    <field name="margin_bottom">7</field>
+    <field name="margin_left">0</field>
+    <field name="margin_right">0</field>
+    <field name="header_line" eval="True"/>
+    <field name="header_spacing">37</field>
+    <field name="dpi">100</field>
+</record>
+
+    <record id="contract_report" model="ir.actions.report">
+        <field name="name">Contracts</field>
+        <field name="model">hr.contract</field>
+<!--        <field name="report_type">xlsx</field>-->
+        <field name="report_type">qweb-html</field>
+<!--        <field name="report_type">qweb-pdf</field>-->
+        <field name="report_name">sd_hr_contracts.contract_report_template</field>
+        <field name="report_file">sd_hr_contracts.contract_report_template</field>
+<!--        <field name="print_report_name">(object._get_report_resume_filename('sd_hr_contracts.records'))</field>-->
+
+<!--        <field name="print_report_name">'Resume-%s' % object.employee_id.name </field>-->
+<!--        <field name="paperformat_id" ref="resume_en_a4"/>-->
+        <field name="binding_model_id" ref="model_hr_contract"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+</odoo>

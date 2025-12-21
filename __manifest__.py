@@ -23,6 +23,9 @@
         'data/hr_contract_sequence.xml',
         'data/location_data.xml',
         'wizard/contract_duplicate.xml',
+        'wizard/contract_report.xml',
+        'report/contract_report.xml',
+        'report/contract_report_template.xml',
     ],
 'assets': {
         'web.assets_backend':[

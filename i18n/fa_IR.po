@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 18.0-20250305\n"
+"Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-14 10:45+0000\n"
-"PO-Revision-Date: 2025-12-14 14:16+0330\n"
+"POT-Creation-Date: 2025-12-21 17:51+0000\n"
+"PO-Revision-Date: 2025-12-21 21:26+0330\n"
 "Last-Translator: Arash Homayounfar <homayounfar@msn.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -40,6 +40,11 @@ msgid "Ahvaz Office"
 msgstr "ستاد اهواز"
 
 #. module: sd_hr_contracts
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.contract_report_wizard
+msgid "All Employees"
+msgstr "همه کارکنان"
+
+#. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_payment__amount
 msgid "Amount"
 msgstr ""
@@ -51,9 +56,20 @@ msgid "Attach files"
 msgstr ""
 
 #. module: sd_hr_contracts
+#. odoo-python
+#: code:addons/sd_hr_contracts/wizard/contract_report.py:0
+msgid "Barcode"
+msgstr "کد پرسنلی"
+
+#. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__bond
 msgid "Bond"
 msgstr "حسن انجام کار"
+
+#. module: sd_hr_contracts
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.contract_report_template
+msgid "CONTRACTS"
+msgstr ""
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields.selection,name:sd_hr_contracts.selection__sd_hr_contracts_duplicate__convert_state__cancel
@@ -63,8 +79,9 @@ msgstr ""
 #. module: sd_hr_contracts
 #: model:ir.model.fields.selection,name:sd_hr_contracts.selection__sd_hr_contracts_duplicate__convert_state__close
 #: model_terms:ir.ui.view,arch_db:sd_hr_contracts.contract_duplicate_wizard
+#: model_terms:ir.ui.view,arch_db:sd_hr_contracts.contract_report_wizard
 msgid "Close"
-msgstr ""
+msgstr "بستن"
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_payment__contract_id
@@ -99,8 +116,10 @@ msgstr ""
 #. module: sd_hr_contracts
 #. odoo-python
 #: code:addons/sd_hr_contracts/models/hr_contract.py:0
+#: model:ir.actions.report,name:sd_hr_contracts.contract_report
+#: model:ir.ui.menu,name:sd_hr_contracts.menu_hr_reporting_contracts
 msgid "Contracts"
-msgstr ""
+msgstr "قراردادها"
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_duplicate__convert_state
@@ -110,6 +129,7 @@ msgstr ""
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__create_uid
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_location__create_uid
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_contract_report__create_uid
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_duplicate__create_uid
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_payment__create_uid
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_payment_type__create_uid
@@ -119,6 +139,7 @@ msgstr ""
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__create_date
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_location__create_date
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_contract_report__create_date
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_duplicate__create_date
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_payment__create_date
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_payment_type__create_date
@@ -133,6 +154,7 @@ msgstr ""
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__display_name
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_location__display_name
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_contract_report__display_name
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_duplicate__display_name
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_payment__display_name
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_payment_type__display_name
@@ -178,9 +200,11 @@ msgid "Employee Contract"
 msgstr "قرارداد کارمند"
 
 #. module: sd_hr_contracts
+#. odoo-python
+#: code:addons/sd_hr_contracts/wizard/contract_report.py:0
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_duplicate__end_date
 msgid "End Date"
-msgstr ""
+msgstr "تاریخ پایان"
 
 #. module: sd_hr_contracts
 #. odoo-python
@@ -200,6 +224,11 @@ msgid "First Contract"
 msgstr "اولین قرارداد"
 
 #. module: sd_hr_contracts
+#: model:ir.model,name:sd_hr_contracts.model_report_sd_hr_contracts_contract_report_template
+msgid "Generate Contract reprot."
+msgstr ""
+
+#. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__output_file
 msgid "Generated File"
 msgstr ""
@@ -208,6 +237,11 @@ msgstr ""
 #: model:ir.actions.act_window,name:sd_hr_contracts.duplicate_action
 msgid "HR contract duplicate"
 msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.actions.act_window,name:sd_hr_contracts.contract_report_action
+msgid "HR contract report"
+msgstr "گزارش قراردادهای منابع انسانی"
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields.selection,name:sd_hr_contracts.selection__hr_contract_type__payment__hourly
@@ -228,11 +262,18 @@ msgstr ""
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__id
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_location__id
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_contract_report__id
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_duplicate__id
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_payment__id
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_payment_type__id
 msgid "ID"
 msgstr ""
+
+#. module: sd_hr_contracts
+#. odoo-python
+#: code:addons/sd_hr_contracts/wizard/contract_report.py:0
+msgid "Is Valid?"
+msgstr "معتبر است؟"
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__issue_date
@@ -258,6 +299,7 @@ msgstr "ستاد کیش"
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__write_uid
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_location__write_uid
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_contract_report__write_uid
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_duplicate__write_uid
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_payment__write_uid
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_payment_type__write_uid
@@ -267,6 +309,7 @@ msgstr ""
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__write_date
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_location__write_date
+#: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_contract_report__write_date
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_duplicate__write_date
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_payment__write_date
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_payment_type__write_date
@@ -289,18 +332,26 @@ msgid "Monthly"
 msgstr ""
 
 #. module: sd_hr_contracts
+#. odoo-python
+#: code:addons/sd_hr_contracts/wizard/contract_report.py:0
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_doc_template__name
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract_location__name
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_duplicate__name
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_sd_hr_contracts_payment_type__name
 msgid "Name"
-msgstr ""
+msgstr "نام"
 
 #. module: sd_hr_contracts
 #. odoo-python
 #: code:addons/sd_hr_contracts/models/hr_contract.py:0
 msgid "New"
 msgstr ""
+
+#. module: sd_hr_contracts
+#. odoo-python
+#: code:addons/sd_hr_contracts/wizard/contract_report.py:0
+msgid "No"
+msgstr "خیر"
 
 #. module: sd_hr_contracts
 #: model:hr.contract.location,name:sd_hr_contracts.record_3
@@ -353,7 +404,7 @@ msgstr ""
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_absorbent
 msgid "Pr Absorbent"
-msgstr "حق جذب"
+msgstr "حق جذف"
 
 #. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__pr_base
@@ -484,6 +535,12 @@ msgid "Start Date"
 msgstr ""
 
 #. module: sd_hr_contracts
+#. odoo-python
+#: code:addons/sd_hr_contracts/wizard/contract_report.py:0
+msgid "State"
+msgstr "وضعیت"
+
+#. module: sd_hr_contracts
 #: model:ir.model.fields,field_description:sd_hr_contracts.field_hr_contract__subject
 msgid "Subject"
 msgstr "موضوع"
@@ -505,8 +562,19 @@ msgstr ""
 
 #. module: sd_hr_contracts
 #. odoo-python
+#: code:addons/sd_hr_contracts/wizard/contract_report.py:0
+msgid "Yes"
+msgstr "بله"
+
+#. module: sd_hr_contracts
+#. odoo-python
 #: code:addons/sd_hr_contracts/models/models.py:0
 msgid "documents"
+msgstr ""
+
+#. module: sd_hr_contracts
+#: model:ir.model,name:sd_hr_contracts.model_sd_hr_contracts_contract_report
+msgid "sd_hr_contracts.contract_report"
 msgstr ""
 
 #. module: sd_hr_contracts

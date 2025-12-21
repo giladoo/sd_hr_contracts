@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="contract_report_template">
+            <t t-call="web.basic_layout">
+                <div class="h1">CONTRACTS</div>
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page">
+                        <div t-esc="doc.name"></div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>
