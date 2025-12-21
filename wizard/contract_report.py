@@ -40,18 +40,28 @@ class SdHrContractDuplacate(models.TransientModel):
 
         print(f">>>>>>>>>>>>>>>>>>\n {len(employees_has_contract)}    {len(employees_no_contract)}")
 
-        report_1 = [[_('Name'), _('Barcode'), _('State'), _('Is Valid?'), _('End Date')]]
+        report_1 = [[_('Name'), _('Barcode'), _('State'), _('Is Valid?'), _('End Date'), _('Running Count')]]
 
         for emp, emp_contracts in contracts.items():
             print(f">>>>>>>>>>>>\n {emp.barcode}\n {emp_contracts}")
             # check if there is only one active contract
+            running_count = len(list(con for con in emp_contracts if con.state == 'open'))
+            running_contract = '' if running_count == 1 else f"{_('Running contract count: ')}[{running_count}]"
+
 
             # check if the active contract is valid at the time
             if emp_contracts and emp_contracts[0].date_end:
-                state = dict(emp_contracts[0]._fields['state']._description_selection(self.env)).get(emp_contracts[0].state)
-                is_valid = YES if emp_contracts[0].date_end > today else NO
-                date_end = jdatejs(emp_contracts[0].date_end, "%Y/%m/%d")
-                report_1.append([emp.name, emp.barcode, state, is_valid, date_end])
+                # if emp_contracts[0].state in ['open', 'draft']
+                if running_count == 1:
+                    emp_contract = list([rec for rec in emp_contracts if rec.state == 'open'])[0]
+                else:
+                    emp_contract = emp_contracts[0]
+
+
+                state = dict(emp_contract._fields['state']._description_selection(self.env)).get(emp_contract.state)
+                is_valid = YES if emp_contract.date_end > today else NO
+                date_end = jdatejs(emp_contract.date_end, "%Y/%m/%d")
+                report_1.append([emp.name, emp.barcode, state, is_valid, date_end, running_contract])
             else:
                 report_1.append([emp.name, emp.barcode, '', '', ''])
             # check the validity days of the active contract
@@ -74,7 +84,8 @@ class SdHrContractDuplacate(models.TransientModel):
         row_style_yes = workbook.add_format({'text_wrap': True, 'font_size': '14', 'font_color': 'green',  })
         sheet = workbook.add_worksheet("Data")
         sheet.set_column(0, 0, 30)
-        sheet.set_column(1, 5, 20)
+        sheet.set_column(1, 4, 20)
+        sheet.set_column(5, 5, 40)
         sheet.autofilter('A1:E3000')
         if is_fa:
             font_name = 'B Nazanin'
