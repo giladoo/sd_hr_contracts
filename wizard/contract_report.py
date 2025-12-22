@@ -24,6 +24,9 @@ class SdHrContractDuplacate(models.TransientModel):
         contract_model = self.env['hr.contract']
         employee_model = self.env['hr.employee']
         attachment_model = self.env['ir.attachment']
+        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        contract_url = f"{base_url}/odoo/employee-contracts/"
+        employee_url = f"{base_url}/odoo/employees/"
         today = fields.Date.today()
         YES = _('Yes')
         NO = _('No')
@@ -40,30 +43,26 @@ class SdHrContractDuplacate(models.TransientModel):
 
         print(f">>>>>>>>>>>>>>>>>>\n {len(employees_has_contract)}    {len(employees_no_contract)}")
 
-        report_1 = [[_('Name'), _('Barcode'), _('State'), _('Is Valid?'), _('End Date'), _('Running Count')]]
+        report_1 = [[_('Name'), _('Barcode'), _('Contract No'), _('State'), _('Is Valid?'), _('End Date'), _('Running Count')]]
 
         for emp, emp_contracts in contracts.items():
-            print(f">>>>>>>>>>>>\n {emp.barcode}\n {emp_contracts}")
+            # print(f">>>>>>>>>>>>\n {emp.barcode}\n {emp_contracts}")
             # check if there is only one active contract
             running_count = len(list(con for con in emp_contracts if con.state == 'open'))
             running_contract = '' if running_count == 1 else f"{_('Running contract count: ')}[{running_count}]"
-
+            if running_count == 1:
+                emp_contract = list([rec for rec in emp_contracts if rec.state == 'open'])[0]
+            else:
+                emp_contract = emp_contracts[0]
 
             # check if the active contract is valid at the time
-            if emp_contracts and emp_contracts[0].date_end:
-                # if emp_contracts[0].state in ['open', 'draft']
-                if running_count == 1:
-                    emp_contract = list([rec for rec in emp_contracts if rec.state == 'open'])[0]
-                else:
-                    emp_contract = emp_contracts[0]
-
-
+            if emp_contract and emp_contract.date_end:
                 state = dict(emp_contract._fields['state']._description_selection(self.env)).get(emp_contract.state)
                 is_valid = YES if emp_contract.date_end > today else NO
                 date_end = jdatejs(emp_contract.date_end, "%Y/%m/%d")
-                report_1.append([emp.name, emp.barcode, state, is_valid, date_end, running_contract])
+                report_1.append([(emp.id, emp.name), emp.barcode, (emp_contract.id, emp_contract.name), state, is_valid, date_end, running_contract])
             else:
-                report_1.append([emp.name, emp.barcode, '', '', ''])
+                report_1.append([(emp.id, emp.name), emp.barcode, (False, ''), '', ''])
             # check the validity days of the active contract
             pass
 
@@ -81,12 +80,16 @@ class SdHrContractDuplacate(models.TransientModel):
                                             'bg_color': '#d0d0d0'})
         header_style.set_align('center')
         row_style = workbook.add_format({'text_wrap': True, 'font_size': '14',  })
+        link_style = workbook.add_format({'text_wrap': True, 'font_size': '14', 'font_color': 'blue' })
         row_style_yes = workbook.add_format({'text_wrap': True, 'font_size': '14', 'font_color': 'green',  })
         sheet = workbook.add_worksheet("Data")
+        sheet.freeze_panes(1, 0)
         sheet.set_column(0, 0, 30)
         sheet.set_column(1, 4, 20)
         sheet.set_column(5, 5, 40)
-        sheet.autofilter('A1:E3000')
+        sheet.set_column(6, 6, 30)
+
+        sheet.autofilter(0, 0, len(report_1), len(report_1[0]), )
         if is_fa:
             font_name = 'B Nazanin'
             font_charset = 178
@@ -100,14 +103,24 @@ class SdHrContractDuplacate(models.TransientModel):
         row_style.set_font(font_name)
         row_style.set_font_family(0)
         row_style.set_font_charset(font_charset)
+        link_style.set_font(font_name)
+        link_style.set_font_family(0)
+        link_style.set_font_charset(font_charset)
 
         for row_idx, row in enumerate(report_1):
             for col_idx, value in enumerate(row):
                 if row_idx:
-                    if col_idx == 3 and value == YES:
+                    if col_idx == 0:
+                        sheet.write_url(row_idx, col_idx, f"{employee_url}{value[0]}", link_style, string=value[1])
+                    elif col_idx == 2 and value[0]:
+                        sheet.write_url(row_idx, col_idx, f"{contract_url}{value[0]}", string=value[1])
+                    elif col_idx == 4 and value == YES:
                         sheet.write(row_idx, col_idx, value, row_style_yes)
+                    elif col_idx == 7:
+                        pass
                     else:
-                        sheet.write(row_idx, col_idx, value, row_style)
+                        value = '' if isinstance(value, tuple) else value
+                        sheet.write(row_idx, col_idx, value or '', row_style)
                 else:
                     sheet.write(row_idx, col_idx, value, header_style)
 
