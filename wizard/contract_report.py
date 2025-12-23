@@ -16,10 +16,9 @@ class SdHrContractDuplacate(models.TransientModel):
     _name = 'sd_hr_contracts.contract_report'
     _description = "sd_hr_contracts.contract_report"
     # _rec_name = 'employee_id'
+    employee_id = fields.Many2one('hr.employee')
 
     def all_employees_contract(self):
-        LIMIT_COUNT = 50
-
         emp_domain = []
         contract_model = self.env['hr.contract']
         employee_model = self.env['hr.employee']
@@ -32,18 +31,28 @@ class SdHrContractDuplacate(models.TransientModel):
         NO = _('No')
 
         employees = employee_model.search(emp_domain, order='barcode')
-        contracts = contract_model.search([ ('employee_id.active', '!=', False)], order='date_end desc').grouped('employee_id')
 
-        employees_dict = dict()
+        # for employee in employees:
+        #     self.create({'employee_id': employee.id})
+        contracts = contract_model.search([ ('employee_id.active', '!=', False)], order='date_end desc').grouped('employee_id')
 
         # create list of employees with no contract
         employees_has_contract = contracts.keys()
-        employees_no_contract = list([emp for emp in employees if emp not in employees_has_contract])
+        # employees_no_contract = list([emp for emp in employees if emp not in employees_has_contract])
         # create list of contracts base on employees
 
-        print(f">>>>>>>>>>>>>>>>>>\n {len(employees_has_contract)}    {len(employees_no_contract)}")
-
-        report_1 = [[_('Name'), _('Barcode'), _('Contract No'), _('State'), _('Is Valid?'), _('End Date'), _('Running Count')]]
+        report_1 = [[_('Name'),
+                     _('Barcode'),
+                     _('Location'),
+                     _('Department'),
+                     _('Contract No'),
+                     _('State'),
+                     _('Is Valid?'),
+                     _('End Date'),
+                     _('Running Count')]]
+        EMP_COL = 0
+        CON_COL = 4
+        ISVALID_COL = 6
 
         for emp, emp_contracts in contracts.items():
             # print(f">>>>>>>>>>>>\n {emp.barcode}\n {emp_contracts}")
@@ -60,9 +69,9 @@ class SdHrContractDuplacate(models.TransientModel):
                 state = dict(emp_contract._fields['state']._description_selection(self.env)).get(emp_contract.state)
                 is_valid = YES if emp_contract.date_end > today else NO
                 date_end = jdatejs(emp_contract.date_end, "%Y/%m/%d")
-                report_1.append([(emp.id, emp.name), emp.barcode, (emp_contract.id, emp_contract.name), state, is_valid, date_end, running_contract])
+                report_1.append([(emp.id, emp.name), emp.barcode, emp.work_location_id.name, emp.department_id.name, (emp_contract.id, emp_contract.name), state, is_valid, date_end, running_contract])
             else:
-                report_1.append([(emp.id, emp.name), emp.barcode, (False, ''), '', ''])
+                report_1.append([(emp.id, emp.name), emp.barcode, emp.work_location_id.name, emp.department_id.name, (False, ''), '', ''])
             # check the validity days of the active contract
             pass
 
@@ -84,12 +93,15 @@ class SdHrContractDuplacate(models.TransientModel):
         row_style_yes = workbook.add_format({'text_wrap': True, 'font_size': '14', 'font_color': 'green',  })
         sheet = workbook.add_worksheet("Data")
         sheet.freeze_panes(1, 0)
-        sheet.set_column(0, 0, 30)
-        sheet.set_column(1, 4, 20)
-        sheet.set_column(5, 5, 40)
-        sheet.set_column(6, 6, 30)
-
         sheet.autofilter(0, 0, len(report_1), len(report_1[0]), )
+
+        sheet.set_column(0, 0, 30)
+        sheet.set_column(1, 1, 10)
+        sheet.set_column(2, 2, 20)
+        sheet.set_column(3, 3, 35)
+        sheet.set_column(4, 7, 15)
+        sheet.set_column(8, 8, 40)
+
         if is_fa:
             font_name = 'B Nazanin'
             font_charset = 178
@@ -110,14 +122,12 @@ class SdHrContractDuplacate(models.TransientModel):
         for row_idx, row in enumerate(report_1):
             for col_idx, value in enumerate(row):
                 if row_idx:
-                    if col_idx == 0:
+                    if col_idx == EMP_COL:
                         sheet.write_url(row_idx, col_idx, f"{employee_url}{value[0]}", link_style, string=value[1])
-                    elif col_idx == 2 and value[0]:
+                    elif col_idx == CON_COL and value[0]:
                         sheet.write_url(row_idx, col_idx, f"{contract_url}{value[0]}", string=value[1])
-                    elif col_idx == 4 and value == YES:
+                    elif col_idx == ISVALID_COL and value == YES:
                         sheet.write(row_idx, col_idx, value, row_style_yes)
-                    elif col_idx == 7:
-                        pass
                     else:
                         value = '' if isinstance(value, tuple) else value
                         sheet.write(row_idx, col_idx, value or '', row_style)
@@ -134,8 +144,33 @@ class SdHrContractDuplacate(models.TransientModel):
                                              ('res_id', '=', self.id),
                                              ('res_field', '=', 'output_file'),
                                              ])
-        # logging.warning(f">>>>>>>>>  attach_id {attach_id}")
-        # return
+
+        # export_data = {
+        #     "model": "sd_hr_contracts.contract_report",
+        #     "ids": self.ids,
+        #     "fields": [
+        #         {"name": "employee_id", "label": "Name"},
+        #
+        #     ],
+        #     "domain": [],
+        #     "context": self.env.context,
+        #     "import_compat": False,
+        # }
+        #
+        # json_data = json.dumps(export_data)
+        #
+        # url = "/web/export/xlsx?data=" + json_data
+        #
+        # return {
+        #     "type": "ir.actions.act_url",
+        #     "url": url,
+        #     "target": "self",
+        # }
+
+
+
+
+
         if len(attach_id) > 1:
             for att in attach_id:
                 att.unlink()
@@ -168,3 +203,5 @@ class SdHrContractDuplacate(models.TransientModel):
                 'url': download_url,
                 'target': 'self',
                 }
+
+
