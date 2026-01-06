@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="contract_report_list" model="ir.ui.view">
+        <field name="name">HR Contract List</field>
+        <field name="model">sd_hr_contracts.contract_report</field>
+        <field name="arch" type="xml">
+            <tree >
+                    <field name="employee_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="contract_report_wizard" model="ir.ui.view">
+        <field name="name">HR Contract contract_report</field>
+        <field name="model">sd_hr_contracts.contract_report</field>
+        <field name="arch" type="xml">
+            <form create="0">
+                <group>
+                    <group>
+<!--                        <field name="representative"/>-->
+<!--                        <field name="start_date"/>-->
+<!--                        <field name="end_date"/>-->
+<!--                        <field name="contract_type_id" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>-->
+<!--                        <field name="doc_template" domain="[('contract_type', '=', contract_type_id)]" required="contract_type_id != False"-->
+<!--                               options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>-->
+                    </group>
+                    <group>
+<!--                        <field name="convert_state"/>-->
+                    </group>
+                </group>
+                <footer>
+                    <button special="cancel" data-hotkey="x" string="Close" class="btn-primary"/>
+                    <button name="all_employees_contract" string="All Employees" type="object" class="btn-secondary" data-hotkey="q"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="contract_report_action" model="ir.actions.act_window">
+        <field name="name">HR contract report</field>
+        <field name="res_model">sd_hr_contracts.contract_report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="contract_report_action_list" model="ir.actions.act_window">
+        <field name="name">HR contract report</field>
+        <field name="res_model">sd_hr_contracts.contract_report</field>
+        <field name="view_mode">list,form</field>
+
+    </record>
+
+    <menuitem
+           id="menu_hr_reporting_contracts"
+           name="Contracts"
+           parent="hr.hr_menu_hr_reports"
+           action="contract_report_action"
+           groups="hr.group_hr_manager,hr.group_hr_user"
+           sequence="99"/>
+
+<!--    <menuitem-->
+<!--           id="menu_hr_reporting_contracts_list"-->
+<!--           name="Contracts List"-->
+<!--           parent="hr.hr_menu_hr_reports"-->
+<!--           action="contract_report_action_list"-->
+<!--           groups="base.group_system"-->
+<!--           sequence="99"/>-->
+
+</odoo>

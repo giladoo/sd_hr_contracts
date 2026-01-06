@@ -19,6 +19,8 @@
         'views/hr_contract_doc_template_views.xml',
         'views/hr_contract_views.xml',
         'data/hr_contract_sequence.xml',
+        # 'wizard/contract_duplicate.xml',
+        'wizard/contract_report.xml',
     ],
 'assets': {
         'web.assets_backend':[
