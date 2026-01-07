@@ -8,6 +8,7 @@ class SdHrContractsContractInfo(models.Model):
 
 
     employee_id = fields.Many2one("hr.employee")
+    contract_id = fields.Many2one("hr.contract")
     employee_link = fields.Char()
     contract_link = fields.Char()
     state = fields.Char()

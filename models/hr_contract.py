@@ -557,6 +557,7 @@ class SdHrContractContract(models.Model):
             contract_url = ''
 
         data = {
+            'contract_id': emp_contract.id,
             'state': state,
             'is_valid': is_valid,
             'date_end': date_end,

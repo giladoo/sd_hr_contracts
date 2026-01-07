@@ -9,10 +9,10 @@ class SdHrdocumentsEmployee(models.Model):
     contract_info = fields.Many2one('sd_hr_contracts.contract_info')
 
     def update_contract_info(self):
-        print(f">>>>>>>>>>>> emp_no_contract_info: {len(self)}")
+        # print(f">>>>>>>>>>>> emp_no_contract_info: {len(self)}")
         contract_model = self.env['hr.contract']
         contract_info_model = self.env['sd_hr_contracts.contract_info']
-
+        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         for emp in self:
             if not emp.contract_info:
                 employee_url = f'=HYPERLINK("{base_url}/web/login?redirect=/web#model=hr.employee&view_type=form&id={emp.id}","{emp.name}")'
