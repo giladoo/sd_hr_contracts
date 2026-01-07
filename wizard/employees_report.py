@@ -8,13 +8,9 @@ import io
 import xlsxwriter
 import base64
 
-
-
-
-
 class SdHrContractDuplacate(models.TransientModel):
-    _name = 'sd_hr_contracts.contract_report'
-    _description = "sd_hr_contracts.contract_report"
+    _name = 'sd_hr_contracts.employees_report'
+    _description = "sd_hr_contracts.employees_report"
     # _rec_name = 'employee_id'
     employee_id = fields.Many2one('hr.employee')
 
@@ -51,9 +47,7 @@ class SdHrContractDuplacate(models.TransientModel):
                      _('End Date'),
                      _('Running Count'),
 
-
                      ]]
-
         EMP_COL = 0
         CON_COL = 4
         ISVALID_COL = 6
@@ -78,12 +72,10 @@ class SdHrContractDuplacate(models.TransientModel):
                 report_1.append([(emp.id, emp.name), emp.barcode, emp.work_location_id.name, emp.department_id.name, (False, ''), '', ''])
             # check the validity days of the active contract
             pass
-
         for emp in employees_no_contract:
             report_1.append(
                 [(emp.id, emp.name), emp.barcode, emp.work_location_id.name, emp.department_id.name, (False, ''), '',
                  ''])
-
 
         # print(f">>>>>>>>>>>>>>>>>>\n {employees}")
         # ic(report_1[:50])
@@ -156,31 +148,6 @@ class SdHrContractDuplacate(models.TransientModel):
                                              ('res_field', '=', 'output_file'),
                                              ])
 
-        # export_data = {
-        #     "model": "sd_hr_contracts.contract_report",
-        #     "ids": self.ids,
-        #     "fields": [
-        #         {"name": "employee_id", "label": "Name"},
-        #
-        #     ],
-        #     "domain": [],
-        #     "context": self.env.context,
-        #     "import_compat": False,
-        # }
-        #
-        # json_data = json.dumps(export_data)
-        #
-        # url = "/web/export/xlsx?data=" + json_data
-        #
-        # return {
-        #     "type": "ir.actions.act_url",
-        #     "url": url,
-        #     "target": "self",
-        # }
-
-
-
-
 
         if len(attach_id) > 1:
             for att in attach_id:
@@ -191,7 +158,7 @@ class SdHrContractDuplacate(models.TransientModel):
             attach_id.write({
                 'datas': output,
                 # 'name': self.file_name_generator(record, file_prefix, file_name, output_ext),
-                'name': 'HR_Contract_Validation_List.xlsx',
+                'name': 'HR_Employees_List.xlsx',
 
             })
             # logging.warning(f">>>>>>>>> is attach_id")

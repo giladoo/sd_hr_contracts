@@ -525,8 +525,51 @@ class SdHrContractContract(models.Model):
             if parts[1]:
                 paragraph.add_run(parts[1])
 
+    def active_contract(self, contract_info):
+        today = fields.Date.today()
+        YES = _('Yes')
+        NO = _('No')
+        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        employee_url = f'=HYPERLINK("{base_url}/web/login?redirect=/web#model=hr.employee&view_type=form&id={contract_info.employee_id.id}","{contract_info.employee_id.name}")'
+
+        emp_contracts = self.search([('employee_id', '=', contract_info.employee_id.id)], order='date_end desc')
+        if not emp_contracts:
+            return
+
+        running_count = len(list(con for con in emp_contracts if con.state == 'open'))
+        running_contract = '' if running_count == 1 else f"{_('Running contract count: ')}[{running_count}]"
+        if running_count == 1:
+            emp_contract = list([rec for rec in emp_contracts if rec.state == 'open'])[0]
+        else:
+            emp_contract = emp_contracts[0]
+
+        if emp_contract and emp_contract.date_end:
+            state = dict(emp_contract._fields['state']._description_selection(self.env)).get(emp_contract.state)
+            is_valid = YES if emp_contract.date_end > today else NO
+            # TODO: calendar based on user lang
+            # date_end = jdatejs(emp_contract.date_end, "%Y/%m/%d")
+            date_end = emp_contract.date_end
+            contract_url = f'=HYPERLINK("{base_url}/web/login?redirect=/web#model=hr.contract&view_type=form&id={emp_contract.id}","{emp_contract.name}")'
+        else:
+            state = ''
+            is_valid = ''
+            date_end = ''
+            contract_url = ''
+
+        data = {
+            'state': state,
+            'is_valid': is_valid,
+            'date_end': date_end,
+            'contract_link': contract_url,
+            'employee_link': employee_url,
+            }
+        contract_info.write(data)
+        ic(contract_info.employee_id.id, data)
+
+
     def write(self, vals):
-        # print(f"\n  >>>   vals: {vals} \n >>>  res: \n")
+        contract_info = self.employee_id.contract_info
+        self.active_contract(contract_info)
         if vals.get('contract_type_id', False):
             raise ValidationError(_("Contract Type cannot be updated as contract number is based on it."))
         return super().write(vals)
@@ -535,7 +578,7 @@ class SdHrContractContract(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            # print(f"\n >>>>> vals: {vals}\n")
+
             if not vals.get('name') or vals['name'] == _('New'):
                 if not vals.get('contract_type_id'):
                     raise ValidationError(_("Please select a 'Contract Type'"))
@@ -544,6 +587,8 @@ class SdHrContractContract(models.Model):
 
                 contract_no = self.env['ir.sequence'].next_by_code('sd_hr.contracts.name') or _('New')
                 vals['name'] = f"{contract_type.code}{year}/{contract_no}"
+            contracts = self.search([('employee_id', '=', vlas.get('employee_id'))])
+            print(f"\n >>>>> vals: {vals}\n contracts: {contracts}")
         return super().create(vals_list)
 
 class SdHrContractContractDocTemplate(models.Model):
